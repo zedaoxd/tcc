@@ -136,7 +136,7 @@ model Lesson {
 
 model Category {
   id      String   @id @default(cuid())
-  name    String   @db.VarChar(100)
+  name    String   @unique @db.VarChar(100)
   courses Course[]
 
   createdAt DateTime @default(now()) @db.DateTime(6)

@@ -30,4 +30,4 @@ import { SendEmailModule } from 'src/send-email/send-email.module';
     JwtService,
   ],
 })
-export class AuthModule { }
+export class AuthModule {}

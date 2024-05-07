@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { CourseModule } from './courses/course.module';
+import { CourseModule } from './course/course.module';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { GlobalExceptionFilter } from './filters/global-exception-filter';
 import { GlobalLoggerInterceptor } from './interceptors/global-logger/global-logger.interceptor';

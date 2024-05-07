@@ -20,10 +20,7 @@ export class CourseController {
 
   @Post()
   @UseGuards(JwtGuard)
-  create(
-    @Body() createCurseDto: CreateCourseDto,
-    @Req() { user: { id } }: JWTPayload,
-  ) {
+  create(@Body() createCurseDto: CreateCourseDto, @Req() { id }: JWTPayload) {
     return this.courseService.create(createCurseDto);
   }
 

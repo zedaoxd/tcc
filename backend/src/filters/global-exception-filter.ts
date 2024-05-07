@@ -6,40 +6,60 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { HttpAdapterHost } from '@nestjs/core';
+import {
+  PrismaClientInitializationError,
+  PrismaClientKnownRequestError,
+  PrismaClientValidationError,
+} from '@prisma/client/runtime/library';
+import { Request, Response } from 'express';
+
+type ErrorResponse = {
+  statusCode: number;
+  status: string;
+  timestamp: string;
+  path: string;
+  message: string | unknown;
+};
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
-  constructor(
-    private readonly adapterHost: HttpAdapterHost,
-    private readonly logger: ConsoleLogger,
-  ) {}
+  constructor(private readonly logger: ConsoleLogger) {}
 
   catch(exception: unknown, host: ArgumentsHost) {
-    this.logger.error(exception);
-
-    const { httpAdapter } = this.adapterHost;
+    this.logger.error(exception, 'GlobalExceptionFilter');
 
     const ctx = host.switchToHttp();
-    const response = ctx.getResponse();
-    const request = ctx.getRequest();
+    const response = ctx.getResponse<Response>();
+    const request = ctx.getRequest<Request>();
 
-    if ('user' in request) {
-      this.logger.warn(`Route accessed by userId: ${request.user.user.id}`);
+    const errorResponse: ErrorResponse = {
+      statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+      status: HttpStatus[HttpStatus.INTERNAL_SERVER_ERROR],
+      timestamp: new Date().toISOString(),
+      path: request.url,
+      message: '',
+    };
+
+    if (exception instanceof HttpException) {
+      errorResponse.statusCode = exception.getStatus();
+      errorResponse.status = HttpStatus[exception.getStatus()];
+      errorResponse.message = exception.getResponse();
+    } else if (exception instanceof PrismaClientKnownRequestError) {
+      errorResponse.statusCode = HttpStatus.BAD_REQUEST;
+      errorResponse.status = HttpStatus[HttpStatus.BAD_REQUEST];
+      errorResponse.message = exception.message;
+    } else if (exception instanceof PrismaClientValidationError) {
+      errorResponse.statusCode = HttpStatus.BAD_REQUEST;
+      errorResponse.status = HttpStatus[HttpStatus.BAD_REQUEST];
+      errorResponse.message = exception.message;
+    } else if (exception instanceof PrismaClientInitializationError) {
+      errorResponse.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+      errorResponse.status = HttpStatus[HttpStatus.INTERNAL_SERVER_ERROR];
+      errorResponse.message = exception.message;
+    } else {
+      errorResponse.message = 'Internal server error';
     }
 
-    const { body, status } =
-      exception instanceof HttpException
-        ? { status: exception.getStatus(), body: exception.getResponse() }
-        : {
-            status: HttpStatus.INTERNAL_SERVER_ERROR,
-            body: {
-              message: 'Internal server error',
-              timestamp: new Date().toISOString(),
-              path: httpAdapter.getRequestUrl(request),
-            },
-          };
-
-    httpAdapter.reply(response, body, status);
+    response.status(errorResponse.statusCode).json(errorResponse);
   }
 }
