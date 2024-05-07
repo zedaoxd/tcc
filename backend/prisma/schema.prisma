@@ -1,0 +1,166 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String     @id @default(cuid())
+  email            String     @unique @db.VarChar(100)
+  firstName        String     @db.VarChar(100)
+  lastName         String?    @db.VarChar(100)
+  password         String     @db.VarChar(255)
+  role             Role       @default(USER)
+  imageUrl         String?    @db.VarChar(255)
+  coursesCreated   Course[]
+  coursesPurchased Purchase[]
+  emailVerified    Boolean    @default(false)
+  emailToken       String?    @db.VarChar(36)
+  reviews          Review[]
+  articles         Article[]
+
+  createdAt DateTime @default(now()) @db.DateTime(6)
+  updatedAt DateTime @updatedAt @db.DateTime(6)
+
+  @@map("users")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Article {
+  id       String @id @default(cuid())
+  title    String @db.VarChar(255)
+  content  String @db.Text
+  imageUrl String @db.VarChar(255)
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
+
+  createdAt DateTime @default(now()) @db.DateTime(6)
+  updatedAt DateTime @updatedAt @db.DateTime(6)
+
+  @@map("articles")
+}
+
+model Review {
+  id       String @id @default(cuid())
+  content  String @db.Text
+  rating   Float
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id])
+  userId   String
+  user     User   @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now()) @db.DateTime(6)
+  updatedAt DateTime @updatedAt @db.DateTime(6)
+
+  @@map("reviews")
+}
+
+model Course {
+  id          String     @id @default(cuid())
+  title       String     @db.VarChar(255)
+  description String     @db.Text
+  imageUrl    String     @db.VarChar(255)
+  authorId    String
+  author      User       @relation(fields: [authorId], references: [id], map: "coursesCreated")
+  price       Float      @db.Float
+  discount    Float      @default(0)
+  soldTo      Purchase[]
+  soldCount   Int        @default(0)
+  rating      Float      @default(0)
+  reviews     Review[]
+  categoryId  String
+  category    Category   @relation(fields: [categoryId], references: [id])
+  modules     Module[]
+  faqs        FAQ[]
+
+  createdAt DateTime @default(now()) @db.DateTime(6)
+  updatedAt DateTime @updatedAt @db.DateTime(6)
+
+  @@map("courses")
+}
+
+model FAQ {
+  id       String @id @default(cuid())
+  question String @db.VarChar(255)
+  answer   String @db.Text
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id])
+
+  createdAt DateTime @default(now()) @db.DateTime(6)
+  updatedAt DateTime @updatedAt @db.DateTime(6)
+
+  @@map("faqs")
+}
+
+model Module {
+  id        String   @id @default(cuid())
+  title     String   @db.VarChar(255)
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id])
+  duration  Int
+  order     Int
+  lessons   Lesson[]
+  createdAt DateTime @default(now()) @db.DateTime(6)
+  updatedAt DateTime @updatedAt @db.DateTime(6)
+
+  @@map("modules")
+}
+
+model Lesson {
+  id        String   @id @default(cuid())
+  title     String   @db.VarChar(255)
+  moduleId  String
+  module    Module   @relation(fields: [moduleId], references: [id])
+  videoUrl  String   @db.VarChar(255)
+  duration  Int
+  order     Int
+  preview   Boolean  @default(false)
+  createdAt DateTime @default(now()) @db.DateTime(6)
+  updatedAt DateTime @updatedAt @db.DateTime(6)
+
+  @@map("lessons")
+}
+
+model Category {
+  id      String   @id @default(cuid())
+  name    String   @db.VarChar(100)
+  courses Course[]
+
+  createdAt DateTime @default(now()) @db.DateTime(6)
+  updatedAt DateTime @updatedAt @db.DateTime(6)
+
+  @@map("categories")
+}
+
+enum PurchaseStatus {
+  PENDING
+  COMPLETED
+  CANCELED
+}
+
+model Purchase {
+  id       String         @id @default(cuid())
+  courseId String
+  course   Course         @relation(fields: [courseId], references: [id])
+  userId   String
+  user     User           @relation(fields: [userId], references: [id])
+  status   PurchaseStatus @default(PENDING)
+
+  createdAt DateTime @default(now()) @db.DateTime(6)
+  updatedAt DateTime @updatedAt @db.DateTime(6)
+
+  @@map("purchases")
+}

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Confirmação de Registro</title>
+</head>
+
+<body
+    style="font-family: Arial, Helvetica, sans-serif; background-color: hsl(0, 0, 100%); color: hsl(0, 0, 3.9%); padding: 20px;">
+    <p style="margin-bottom: 15px;">Olá {{firstName}},</p>
+
+    <p style="margin-bottom: 15px;">
+        Obrigado por se registrar! Por favor, clique no link abaixo para confirmar seu e-mail:
+    </p>
+
+    <p>
+        <a style="color: hsl(21, 100%, 59%); text-decoration: none; padding: 5px; border-radius: 5px; background-color: hsl(21, 100%, 59%, 0.1);"
+            href="{{verificationLink}}">
+            Confirmar E-mail
+        </a>
+    </p>
+</body>
+
+</html>
