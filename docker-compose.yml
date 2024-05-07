@@ -41,13 +41,14 @@ services:
     environment:
       NODE_ENV: development
       DATABASE_URL: mysql://root:root@db:3306/tcc
-      SALT_OR_ROUNDS: 10
+      SALT_OR_ROUNDS: $2b$10$9z70cN9X9MPw.MG7.75i0u
       JWT_SECRET: 50a68c38f44df8b84d9e95c4901260651b1d97622358878c3ff61814c26f8434
       JWT_EXPIRES_IN: 7d
       REDIS_PORT: 6379
       REDIS_HOST: redis
       FRONTEND_URL: http://localhost:3000
       SERVER_PORT: 4000
+      CORS_ORIGIN: http://localhost:3000
     networks:
       - default
 
