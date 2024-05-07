@@ -1,7 +1,11 @@
-import { ClassSerializerInterceptor, ConsoleLogger, Module } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  ConsoleLogger,
+  Module,
+} from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { CursesModule } from './curses/curses.module';
+import { CourseModule } from './courses/course.module';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { GlobalExceptionFilter } from './filters/global-exception-filter';
 import { GlobalLoggerInterceptor } from './interceptors/global-logger/global-logger.interceptor';
@@ -23,7 +27,7 @@ import { BullModule } from '@nestjs/bull';
       }),
       inject: [ConfigService],
     }),
-    CursesModule,
+    CourseModule,
     SendEmailModule,
     AuthModule,
   ],
@@ -44,4 +48,4 @@ import { BullModule } from '@nestjs/bull';
     ConsoleLogger,
   ],
 })
-export class AppModule { }
+export class AppModule {}
