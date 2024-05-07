@@ -1,26 +1,11 @@
 FROM node:20.10.0-slim
 
-# Install OpenSSL
-RUN apt-get update && apt-get install -y openssl
+RUN apt-get update && apt-get install -y openssl procps
 
-# Create app directory
-WORKDIR /app
+USER node
 
-# Copy package.json and package-lock.json
-COPY package.json /app
-COPY package-lock.json /app
+RUN mkdir /home/node/backend
 
-# Copy prisma
-COPY prisma /app/prisma
+WORKDIR /home/node/backend
 
-# Install app dependencies
-RUN npm install
-
-# Bundle app source
-COPY . /app
-
-# Expose the port the app runs in
-EXPOSE 3000
-
-# Serve the app
-CMD ["npm", "run" ,"start:prod"]
+CMD ["/home/node/backend/scripts/start-dev.sh"]

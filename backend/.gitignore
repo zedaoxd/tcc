@@ -4,6 +4,7 @@
 /build
 
 /db
+/prisma/migrations
 
 # Logs
 logs
