@@ -8,11 +8,15 @@ import {
   Delete,
   UseGuards,
   Req,
+  Query,
+  DefaultValuePipe,
 } from '@nestjs/common';
 import { CourseService } from './course.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-curse.dto';
 import { JwtGuard } from 'src/auth/jwt/jwt.guard';
+import { PaginatedDto } from 'src/shared/paginated-dto';
+import { SimpleCourseDto } from './dto/simple-course.dto';
 
 @Controller('courses')
 export class CourseController {
@@ -20,13 +24,20 @@ export class CourseController {
 
   @Post()
   @UseGuards(JwtGuard)
-  create(@Body() createCurseDto: CreateCourseDto, @Req() { id }: JWTPayload) {
-    return this.courseService.create(createCurseDto);
+  create(
+    @Body() createCurseDto: CreateCourseDto,
+    @Req() { user: { id } }: IRequest,
+  ) {
+    return this.courseService.create(createCurseDto, id);
   }
 
   @Get()
-  findAll() {
-    return this.courseService.findAll();
+  findAll(
+    @Query('page', new DefaultValuePipe(0)) page: number,
+    @Query('size', new DefaultValuePipe(20)) size: number,
+    @Query('search', new DefaultValuePipe('')) search: string,
+  ): Promise<PaginatedDto<SimpleCourseDto>> {
+    return this.courseService.findAll(page, size, search);
   }
 
   @Get(':id')

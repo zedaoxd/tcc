@@ -1,15 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-curse.dto';
+import { CourseRepository } from './course.repository';
+import { PaginatedDto } from 'src/shared/paginated-dto';
+import { SimpleCourseDto } from './dto/simple-course.dto';
 
 @Injectable()
 export class CourseService {
-  create(createCurseDto: CreateCourseDto) {
-    return 'This action adds a new curse';
+  constructor(private readonly repository: CourseRepository) {}
+
+  async create(createCurseDto: CreateCourseDto, authorId: string) {
+    return await this.repository.create(createCurseDto, authorId);
   }
 
-  findAll() {
-    return `This action returns all curses`;
+  async findAll(
+    page: number,
+    size: number,
+    search: string,
+  ): Promise<PaginatedDto<SimpleCourseDto>> {
+    return await this.repository.findAll(page, size, search);
   }
 
   findOne(id: number) {

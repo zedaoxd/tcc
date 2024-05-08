@@ -5,3 +5,7 @@ interface JWTPayload {
   iat?: number;
   exp?: number;
 }
+
+interface IRequest {
+  user: JWTPayload;
+}
