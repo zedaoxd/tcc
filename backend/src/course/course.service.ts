@@ -58,4 +58,8 @@ export class CourseService {
 
     return authorIdFromCourse === authorId;
   }
+
+  async findTopPurchased() {
+    return await this.repository.findTopPurchased();
+  }
 }

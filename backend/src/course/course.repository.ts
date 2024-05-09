@@ -106,4 +106,31 @@ export class CourseRepository {
 
     return author?.authorId;
   }
+
+  async findTopPurchased() {
+    return await this.prisma.course.findMany({
+      select: {
+        id: true,
+        title: true,
+        price: true,
+        discount: true,
+        soldCount: true,
+        imageUrl: true,
+        category: {
+          select: {
+            name: true,
+          },
+        },
+        modules: {
+          select: {
+            duration: true,
+          },
+        },
+      },
+      take: 6,
+      orderBy: {
+        soldCount: 'desc',
+      },
+    });
+  }
 }

@@ -36,6 +36,11 @@ export class CourseController {
     return this.courseService.create(createCurseDto, id);
   }
 
+  @Get('top-purchased')
+  findTopPurchased() {
+    return this.courseService.findTopPurchased();
+  }
+
   @Get()
   findAll(
     @Query('page', new DefaultValuePipe(0)) page: number,
