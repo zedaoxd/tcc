@@ -10,6 +10,8 @@ import {
   Req,
   Query,
   DefaultValuePipe,
+  Res,
+  HttpStatus,
 } from '@nestjs/common';
 import { CourseService } from './course.service';
 import { CreateCourseDto } from './dto/create-course.dto';
@@ -17,6 +19,9 @@ import { UpdateCourseDto } from './dto/update-curse.dto';
 import { JwtGuard } from 'src/auth/jwt/jwt.guard';
 import { PaginatedDto } from 'src/shared/paginated-dto';
 import { SimpleCourseDto } from './dto/simple-course.dto';
+import { FullCourseDto } from './dto/full-course.dto';
+import { IsAuthorOrAdminGuard } from './guards/is-author-or-admin/is-author-or-admin.guard';
+import { Response } from 'express';
 
 @Controller('courses')
 export class CourseController {
@@ -41,17 +46,24 @@ export class CourseController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.courseService.findOne(+id);
+  findOne(@Param('id') id: string): Promise<FullCourseDto> {
+    return this.courseService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCurseDto: UpdateCourseDto) {
-    return this.courseService.update(+id, updateCurseDto);
+  @UseGuards(JwtGuard, IsAuthorOrAdminGuard)
+  update(
+    @Param('id') id: string,
+    @Body() updateCurseDto: UpdateCourseDto,
+  ): Promise<FullCourseDto> {
+    return this.courseService.update(id, updateCurseDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.courseService.remove(+id);
+  @UseGuards(JwtGuard, IsAuthorOrAdminGuard)
+  remove(@Param('id') id: string, @Res() res: Response) {
+    this.courseService.remove(id);
+
+    return res.status(HttpStatus.NO_CONTENT).send();
   }
 }

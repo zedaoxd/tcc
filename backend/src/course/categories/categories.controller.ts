@@ -13,7 +13,7 @@ import {
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-import { Role, Roles } from 'src/auth/roles/role.decorator';
+import { Role, ROLE } from 'src/auth/roles/role.decorator';
 import { JwtGuard } from 'src/auth/jwt/jwt.guard';
 import { RoleGuard } from 'src/auth/roles/role.guard';
 import { Response } from 'express';
@@ -22,7 +22,7 @@ import { Response } from 'express';
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
-  @Role(Roles.ADMIN)
+  @Role(ROLE.ADMIN)
   @UseGuards(JwtGuard, RoleGuard)
   @Post()
   create(@Body() createCategoryDto: CreateCategoryDto) {
@@ -34,14 +34,14 @@ export class CategoriesController {
     return this.categoriesService.findAll();
   }
 
-  @Role(Roles.ADMIN)
+  @Role(ROLE.ADMIN)
   @UseGuards(JwtGuard, RoleGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.categoriesService.findOne(id);
   }
 
-  @Role(Roles.ADMIN)
+  @Role(ROLE.ADMIN)
   @UseGuards(JwtGuard, RoleGuard)
   @Patch(':id')
   update(
@@ -51,7 +51,7 @@ export class CategoriesController {
     return this.categoriesService.update(id, updateCategoryDto);
   }
 
-  @Role(Roles.ADMIN)
+  @Role(ROLE.ADMIN)
   @UseGuards(JwtGuard, RoleGuard)
   @Delete(':id')
   remove(@Param('id') id: string, @Res() res: Response) {

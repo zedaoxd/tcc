@@ -3,6 +3,8 @@ import { PrismaService } from 'src/prisma.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { PaginatedDto } from 'src/shared/paginated-dto';
 import { SimpleCourseDto } from './dto/simple-course.dto';
+import { FullCourseDto } from './dto/full-course.dto';
+import { UpdateCourseDto } from './dto/update-curse.dto';
 
 @Injectable()
 export class CourseRepository {
@@ -65,5 +67,43 @@ export class CourseRepository {
     const totalPages = Math.ceil(totalItems / size);
 
     return new PaginatedDto({ totalItems, page, totalPages, size, itens });
+  }
+
+  async findOne(id: string): Promise<FullCourseDto> {
+    return await this.prisma.course.findUnique({
+      where: {
+        id,
+      },
+    });
+  }
+
+  async update(id: string, dto: UpdateCourseDto): Promise<FullCourseDto> {
+    return await this.prisma.course.update({
+      where: {
+        id,
+      },
+      data: dto,
+    });
+  }
+
+  async remove(id: string) {
+    return await this.prisma.course.delete({
+      where: {
+        id,
+      },
+    });
+  }
+
+  async getAuthorId(courseId: string): Promise<string | undefined> {
+    const author = await this.prisma.course.findUnique({
+      where: {
+        id: courseId,
+      },
+      select: {
+        authorId: true,
+      },
+    });
+
+    return author?.authorId;
   }
 }

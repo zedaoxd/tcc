@@ -1,4 +1,6 @@
-export class Course {
+import { Course } from '../entities/course.entity';
+
+export class FullCourseDto {
   id: string;
   title: string;
   description: string;
@@ -12,4 +14,8 @@ export class Course {
   preview: boolean;
   createdAt: Date;
   updatedAt: Date;
+
+  constructor(entity: Course) {
+    Object.assign(this, entity);
+  }
 }
