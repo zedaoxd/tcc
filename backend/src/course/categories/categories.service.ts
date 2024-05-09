@@ -30,4 +30,8 @@ export class CategoriesService {
   async remove(id: string) {
     return await this.repository.remove(id);
   }
+
+  async findTopCategories() {
+    return await this.repository.findTopCategories();
+  }
 }

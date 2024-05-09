@@ -31,4 +31,24 @@ export class CategoryRepository {
   async remove(id: string) {
     await this.prisma.category.delete({ where: { id } });
   }
+
+  async findTopCategories() {
+    return await this.prisma.category.findMany({
+      select: {
+        id: true,
+        name: true,
+        _count: {
+          select: {
+            courses: true,
+          },
+        },
+      },
+      orderBy: {
+        courses: {
+          _count: 'desc',
+        },
+      },
+      take: 10,
+    });
+  }
 }

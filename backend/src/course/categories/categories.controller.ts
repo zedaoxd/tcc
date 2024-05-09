@@ -29,6 +29,11 @@ export class CategoriesController {
     return this.categoriesService.create(createCategoryDto);
   }
 
+  @Get('top-categories')
+  findTopCategories() {
+    return this.categoriesService.findTopCategories();
+  }
+
   @Get()
   findAll() {
     return this.categoriesService.findAll();
