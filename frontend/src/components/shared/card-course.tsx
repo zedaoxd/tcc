@@ -9,16 +9,7 @@ import priceToTsx from "@/components/shared/priceToTsx";
 
 const jost = Jost({ subsets: ["latin"], weight: ["400"] });
 
-type CardCourseProps = {
-  thumbnail: string;
-  title: string;
-  author: string;
-  duration: string;
-  numberOfStudents: number;
-  price: number;
-  category: string;
-  discountPercentage?: number;
-  id: string;
+type CardCourseProps = Course.SimpleModel & {
   className?: string;
 };
 
@@ -46,7 +37,7 @@ export default function CardCourse({
 
         <Badge
           className="absolute top-2 left-2 lg:top-3 lg:left-3"
-          variant="dark"
+          variant="gray"
         >
           {category}
         </Badge>
@@ -62,7 +53,7 @@ export default function CardCourse({
         <div className="flex gap-6">
           <div className={cn(jost.className, "flex gap-2 items-baseline")}>
             <Clock size={16} className="text-primary" />
-            <span>{duration} Weeks</span>
+            <span>{duration} minutes</span>
           </div>
 
           <div className={cn(jost.className, "flex gap-2 items-baseline")}>

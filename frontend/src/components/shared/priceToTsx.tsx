@@ -2,9 +2,9 @@ import { formatPrice } from "@/lib/utils";
 
 export default function priceToTsx(price: number, discountPercentage?: number) {
   const formattedPriceWithDiscount = formatPrice(
-    (price / 1_000) * (1 - (discountPercentage ?? 0))
+    price * (1 - (discountPercentage ?? 0))
   );
-  const formattedFullPrice = formatPrice(price / 1_000);
+  const formattedFullPrice = formatPrice(price);
   const priceWithDiscount = price * (1 - (discountPercentage ?? 0));
 
   const hasDiscountButNotFree = (
@@ -12,7 +12,7 @@ export default function priceToTsx(price: number, discountPercentage?: number) {
       <span className="text-gray-400 line-through text-lg">
         {formattedFullPrice}
       </span>
-      <span className="text-red-500 ml-2 font-semibold text-lg">
+      <span className="text-green-500 ml-2 font-semibold text-lg">
         {formattedPriceWithDiscount}
       </span>
     </>

@@ -126,6 +126,12 @@ export class CourseRepository {
             duration: true,
           },
         },
+        author: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
       },
       take: 6,
       orderBy: {

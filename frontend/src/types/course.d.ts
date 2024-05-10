@@ -1,16 +1,19 @@
 namespace Course {
-  type Model = {
+  type SimpleModel = {
     id: string;
     author: string;
     title: string;
     thumbnail: string;
-    duration: string;
+    duration: number;
     category: string;
     numberOfStudents: number;
-    lessons: number;
     price: number;
-    level: string;
     discountPercentage?: number;
+  };
+
+  type Model = SimpleModel & {
+    lessons: number;
+    level: string;
   };
 
   namespace Category {

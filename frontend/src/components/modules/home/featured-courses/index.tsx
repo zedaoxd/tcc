@@ -14,7 +14,7 @@ export default function FeaturedCourses() {
       action={ButtonShowAll}
     >
       <div className="pt-3 grid gap-7 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        {featuredCourses.map((course) => (
+        {featuredCourses?.map((course) => (
           <CardCourse
             className="relative transition-transform transform-gpu hover:-translate-y-3 hover:shadow-lg"
             key={course.id}
