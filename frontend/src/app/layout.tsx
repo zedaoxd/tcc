@@ -5,6 +5,7 @@ import Navbar from "@/components/layout/navbar";
 import { cn } from "@/lib/utils";
 import Footer from "@/components/layout/footer";
 import { Toaster } from "sonner";
+import AppProvider from "@/lib/app-provider";
 
 const exo = Exo({ subsets: ["latin"] });
 
@@ -24,13 +25,15 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body className={cn(exo.className)}>
-        <Navbar />
+        <AppProvider>
+          <Navbar />
 
-        {children}
+          {children}
 
-        <Footer />
+          <Footer />
 
-        <Toaster />
+          <Toaster />
+        </AppProvider>
       </body>
     </html>
   );

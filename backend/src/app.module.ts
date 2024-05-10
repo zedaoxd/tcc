@@ -11,6 +11,7 @@ import { GlobalExceptionFilter } from './filters/global-exception-filter';
 import { GlobalLoggerInterceptor } from './interceptors/global-logger/global-logger.interceptor';
 import { SendEmailModule } from './send-email/send-email.module';
 import { BullModule } from '@nestjs/bull';
+import { MercadoPagoService } from './mercado-pago/mercado-pago.service';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { BullModule } from '@nestjs/bull';
       useClass: GlobalLoggerInterceptor,
     },
     ConsoleLogger,
+    MercadoPagoService,
   ],
 })
 export class AppModule {}

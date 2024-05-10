@@ -1,3 +1,4 @@
+import { Skeleton as SkeletonShadcn } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { ReactNode } from "react";
 
@@ -11,12 +12,12 @@ type Props = {
 export default function CardCategory({ icon, name, quantity, slug }: Props) {
   return (
     <Link
-      href={`/category/${slug}`}
+      href={slug}
       className="border border-gray-200 rounded-2xl flex flex-col items-center justify-center gap-6 py-10 relative transition-transform transform-gpu hover:-translate-y-3 hover:shadow-lg"
     >
       <div className="text-primary">{icon}</div>
 
-      <div className="text-center">
+      <div className="text-center px-2">
         <h3 className="text-xl font-semibold">{name}</h3>
 
         <p className="text-sm text-gray-500">{quantity} Courses</p>
@@ -24,3 +25,6 @@ export default function CardCategory({ icon, name, quantity, slug }: Props) {
     </Link>
   );
 }
+CardCategory.Skeleton = function Skeleton() {
+  return <SkeletonShadcn className="h-44 w-full"></SkeletonShadcn>;
+};

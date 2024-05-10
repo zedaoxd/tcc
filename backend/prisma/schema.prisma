@@ -147,18 +147,25 @@ model Category {
 }
 
 enum PurchaseStatus {
-  PENDING
-  COMPLETED
-  CANCELED
+  pending
+  approved
+  authorized
+  in_process
+  in_mediation
+  rejected
+  cancelled
+  refunded
+  charged_back
 }
 
 model Purchase {
-  id       String         @id @default(cuid())
-  courseId String
-  course   Course         @relation(fields: [courseId], references: [id])
-  userId   String
-  user     User           @relation(fields: [userId], references: [id])
-  status   PurchaseStatus @default(PENDING)
+  id            String         @id @default(cuid())
+  courseId      String
+  course        Course         @relation(fields: [courseId], references: [id])
+  userId        String
+  user          User           @relation(fields: [userId], references: [id])
+  status        PurchaseStatus @default(pending)
+  mercadoPagoId BigInt         @db.BigInt
 
   createdAt DateTime @default(now()) @db.DateTime(6)
   updatedAt DateTime @updatedAt @db.DateTime(6)

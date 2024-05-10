@@ -13,8 +13,11 @@ namespace Course {
     discountPercentage?: number;
   };
 
-  type Category = {
-    id: string;
-    name: string;
-  };
+  namespace Category {
+    type Model = {
+      id: string;
+      name: string;
+      quantity: number;
+    };
+  }
 }

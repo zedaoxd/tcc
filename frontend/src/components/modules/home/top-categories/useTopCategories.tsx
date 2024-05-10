@@ -1,98 +1,62 @@
 "use client";
 
 import {
-  Aperture,
-  BarChart,
+  AlignEndHorizontal,
+  Binary,
+  BrainCircuit,
   Brush,
-  Clapperboard,
   Code2,
-  FlaskConical,
-  Mic,
-  NotebookPen,
-  Percent,
-  Waypoints,
+  Contact,
+  Cpu,
+  Music,
+  Notebook,
+  Speech,
 } from "lucide-react";
-import { Category } from "./types";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
+import { getTopCategories } from "../../courses/categories/service";
+import { ReactNode } from "react";
+
+type Card = {
+  icon: ReactNode;
+  name: string;
+  quantity: number;
+  slug: string;
+};
 
 type UseTopCategories = {
-  topCategories: Category[];
-  ButtonShowAll: React.ReactNode;
+  topCategories: Card[];
+  isLoading: boolean;
+  error: Error | null;
 };
 
 export default function useTopCategories(): UseTopCategories {
-  const topCategories: Category[] = [
-    {
-      name: "Art & Design",
-      icon: <Brush />,
-      quantity: 38,
-      slug: "art-design",
-    },
-    {
-      name: "Development",
-      icon: <Code2 />,
-      quantity: 33,
-      slug: "development",
-    },
-    {
-      name: "Communication",
-      icon: <Mic />,
-      quantity: 31,
-      slug: "communication",
-    },
-    {
-      name: "Videography",
-      icon: <Clapperboard />,
-      quantity: 29,
-      slug: "videography",
-    },
-    {
-      name: "Photography",
-      icon: <Aperture />,
-      quantity: 29,
-      slug: "photography",
-    },
-    {
-      name: "Marketing",
-      icon: <Percent />,
-      quantity: 29,
-      slug: "marketing",
-    },
-    {
-      name: "Content writing",
-      icon: <NotebookPen />,
-      quantity: 28,
-      slug: "content-writing",
-    },
-    {
-      name: "Finance",
-      icon: <BarChart />,
-      quantity: 24,
-      slug: "finance",
-    },
-    {
-      name: "Science",
-      icon: <FlaskConical />,
-      quantity: 23,
-      slug: "science",
-    },
-    {
-      name: "Network",
-      icon: <Waypoints />,
-      quantity: 21,
-      slug: "network",
-    },
-  ];
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["top-categories"],
+    queryFn: getTopCategories,
+  });
 
-  const ButtonShowAll = (
-    <Button variant="outline" className="font-bold" asChild>
-      <Link href="/categories">All Categories</Link>
-    </Button>
-  );
+  const categoriesIconMapper: { [key: string]: ReactNode } = {
+    Programming: <Code2 />,
+    Technology: <Cpu />,
+    "Data Science": <BrainCircuit />,
+    "Personal Development": <Contact />,
+    "Graphic Design": <Brush />,
+    "Foreign Languages": <Speech />,
+    "Digital Marketing": <Binary />,
+    Music: <Music />,
+    "Business and Entrepreneurship": <AlignEndHorizontal />,
+    Portuguese: <Notebook />,
+  };
+
+  const topCategories = data?.map((category) => ({
+    ...category,
+    icon: categoriesIconMapper[category.name],
+    slug: `courses?category=${category.id}`,
+  }));
 
   return {
-    topCategories,
-    ButtonShowAll,
+    isLoading,
+    topCategories: topCategories || [],
+    error,
   };
 }
