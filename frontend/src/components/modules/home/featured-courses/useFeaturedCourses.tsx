@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import { getFeaturedCourses } from "../../courses/categories/service";
+import { getFeaturedCourses } from "../../courses/service";
 
 type UseFeaturedCourse = {
   featuredCourses: Course.SimpleModel[] | undefined;
