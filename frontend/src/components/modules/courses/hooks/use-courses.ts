@@ -30,7 +30,7 @@ type UseCourses = {
 export const useCourses = ({
   page = 1,
   search = "",
-  size = 1,
+  size = 6,
 }: CoursesProps = {}): UseCourses => {
   const [paginationState, setPaginationState] = useState({
     page: page,
@@ -54,8 +54,6 @@ export const useCourses = ({
 
     if (courses?.totalPages === undefined || page > courses?.totalPages) return;
 
-    console.log(page);
-
     setPaginationState((prev) => ({
       ...prev,
       page: page,
@@ -77,8 +75,6 @@ export const useCourses = ({
 
   const previousPage = () => {
     if (courses?.page === 1) return;
-
-    console.log("previousPage");
 
     setPaginationState((prev) => ({
       ...prev,
