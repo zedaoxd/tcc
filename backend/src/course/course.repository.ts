@@ -37,9 +37,17 @@ export class CourseRepository {
       },
       select: {
         id: true,
+        level: true,
         title: true,
         soldCount: true,
         discount: true,
+        price: true,
+        imageUrl: true,
+        category: {
+          select: {
+            name: true,
+          },
+        },
         modules: {
           select: {
             duration: true,
@@ -61,7 +69,7 @@ export class CourseRepository {
         title: 'asc',
       },
       take: size,
-      skip: page * size,
+      skip: (page - 1) * size,
     });
 
     const totalPages = Math.ceil(totalItems / size);

@@ -22,6 +22,7 @@ import { SimpleCourseDto } from './dto/simple-course.dto';
 import { FullCourseDto } from './dto/full-course.dto';
 import { IsAuthorOrAdminGuard } from './guards/is-author-or-admin/is-author-or-admin.guard';
 import { Response } from 'express';
+import { OneOrGreaterPipe } from './pipes/one-or-greater/one-or-greater.pipe';
 
 @Controller('courses')
 export class CourseController {
@@ -43,7 +44,7 @@ export class CourseController {
 
   @Get()
   findAll(
-    @Query('page', new DefaultValuePipe(0)) page: number,
+    @Query('page', new DefaultValuePipe(1), OneOrGreaterPipe) page: number,
     @Query('size', new DefaultValuePipe(20)) size: number,
     @Query('search', new DefaultValuePipe('')) search: string,
   ): Promise<PaginatedDto<SimpleCourseDto>> {

@@ -68,24 +68,31 @@ model Review {
   @@map("reviews")
 }
 
+enum CourseLevel {
+  beginner
+  intermediate
+  advanced
+}
+
 model Course {
-  id          String     @id @default(cuid())
-  title       String     @db.VarChar(255)
-  description String     @db.Text
-  imageUrl    String     @db.VarChar(255)
+  id          String      @id @default(cuid())
+  title       String      @db.VarChar(255)
+  description String      @db.Text
+  imageUrl    String      @db.VarChar(255)
   authorId    String
-  author      User       @relation(fields: [authorId], references: [id], map: "coursesCreated")
-  price       Float      @db.Float
-  discount    Float      @default(0)
+  author      User        @relation(fields: [authorId], references: [id], map: "coursesCreated")
+  price       Float       @db.Float
+  discount    Float       @default(0)
   soldTo      Purchase[]
-  soldCount   Int        @default(0)
-  rating      Float      @default(0)
+  soldCount   Int         @default(0)
+  rating      Float       @default(0)
   reviews     Review[]
   categoryId  String
-  category    Category   @relation(fields: [categoryId], references: [id])
+  category    Category    @relation(fields: [categoryId], references: [id])
   modules     Module[]
   faqs        FAQ[]
-  preview     Boolean    @default(false)
+  preview     Boolean     @default(false)
+  level       CourseLevel @default(beginner)
 
   createdAt DateTime @default(now()) @db.DateTime(6)
   updatedAt DateTime @updatedAt @db.DateTime(6)
