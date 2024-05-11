@@ -9,12 +9,11 @@ import {
 import Image from "next/image";
 import { Jost } from "next/font/google";
 import { cn } from "@/lib/utils";
-import { BarChart, Clock, FileText, GraduationCap } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import priceToTsx from "@/components/shared/priceToTsx";
-import CurseDescription from "../../../cuse-description";
 import CurseStatus from "../../../curse-status";
+import { SkeletonSchacnUI } from "@/components/ui/skeleton";
+import { Separator } from "@/components/ui/separator";
 
 const jost = Jost({ subsets: ["latin"], weight: ["400"] });
 
@@ -23,7 +22,7 @@ type CardCourseHorizontalProps = {
   author: string;
   title: string;
   thumbnail: string;
-  duration: string;
+  duration: number;
   numberOfStudents: number;
   lessons: number;
   price: number;
@@ -90,3 +89,7 @@ export default function CardCourseHorizontal({
     </Card>
   );
 }
+
+CardCourseHorizontal.Skeleton = function Skeleton() {
+  return <SkeletonSchacnUI className="w-full h-64" />;
+};

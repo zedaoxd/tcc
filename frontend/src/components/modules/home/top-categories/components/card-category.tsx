@@ -1,4 +1,4 @@
-import { Skeleton as SkeletonShadcn } from "@/components/ui/skeleton";
+import { SkeletonSchacnUI } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { ReactNode } from "react";
 
@@ -26,5 +26,5 @@ export default function CardCategory({ icon, name, quantity, slug }: Props) {
   );
 }
 CardCategory.Skeleton = function Skeleton() {
-  return <SkeletonShadcn className="h-44 w-full"></SkeletonShadcn>;
+  return <SkeletonSchacnUI className="h-44 w-full"></SkeletonSchacnUI>;
 };

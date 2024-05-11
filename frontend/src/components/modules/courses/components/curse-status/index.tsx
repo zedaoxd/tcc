@@ -2,7 +2,7 @@ import { BarChart, Clock, FileText, GraduationCap } from "lucide-react";
 import CurseDescription from "../cuse-description";
 
 type Props = {
-  duration: string;
+  duration: number;
   numberOfStudents: number;
   level: string;
   lessons: number;

@@ -62,27 +62,51 @@ export default function Filter({
 
       <RadioGroup defaultValue={initialChecked}>
         {items.map((item, index) => (
-          <Link
-            href={{
-              pathname: "/courses",
-              query: {
-                ...searchParams,
-                [paramKey]: "name" in item ? item.id : item.rating,
-              },
-            }}
+          <Filter.Option
             key={index}
-            className="flex justify-between items-center"
-          >
-            {"name" in item
-              ? renderName(item.id, item.name)
-              : renderRating(item.rating)}
-
-            <span className="text-sm font-medium text-gray-500">
-              {item.size}
-            </span>
-          </Link>
+            searchParams={searchParams}
+            paramKey={paramKey}
+            item={item}
+          />
         ))}
       </RadioGroup>
     </div>
   );
 }
+
+type FilterOptions = {
+  searchParams: SearchParams;
+  paramKey: string;
+  item: Item;
+};
+
+Filter.Option = function FilterOption({
+  searchParams,
+  paramKey,
+  item,
+}: FilterOptions) {
+  return (
+    <Link
+      href={{
+        pathname: "/courses",
+        query: {
+          ...searchParams,
+          [paramKey]: "name" in item ? item.id : item.rating,
+        },
+      }}
+      className="flex justify-between items-center"
+    >
+      {"name" in item
+        ? renderName(item.id, item.name)
+        : renderRating(item.rating)}
+
+      <span
+        className="text-sm font-medium text-gray-500"
+        // TODO: why this warning appears?
+        suppressHydrationWarning
+      >
+        {item.size}
+      </span>
+    </Link>
+  );
+};

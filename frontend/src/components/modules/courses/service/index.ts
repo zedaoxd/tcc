@@ -32,3 +32,55 @@ export async function getFeaturedCourses(): Promise<Course.SimpleModel[]> {
     duration: course.modules.reduce((acc, module) => acc + module.duration, 0),
   }));
 }
+
+type GetPaginatedCourses = {
+  level: string;
+  modules: Array<{
+    _count: {
+      lessons: number;
+    };
+    duration: number;
+  }>;
+} & GetFeaturedCourses;
+
+type GetPaginatedCoursesParams = {
+  page: number;
+  size: number;
+  search: string;
+};
+
+export async function getPaginatedCourses(
+  getParams: GetPaginatedCoursesParams
+): Promise<Paginated<Course.Model>> {
+  const params = new URLSearchParams({
+    page: getParams.page.toString(),
+    size: getParams.size.toString(),
+    search: getParams.search,
+  }).toString();
+
+  const response = await api.get<Paginated<GetPaginatedCourses>>(
+    `/courses?${params}`
+  );
+
+  return {
+    ...response.data,
+    itens: response.data.itens.map(mapCourse),
+  };
+}
+
+const mapCourse = (course: GetPaginatedCourses): Course.Model => ({
+  id: course.id,
+  author: `${course.author.firstName} ${course.author.lastName}`,
+  category: course.category.name,
+  duration: course.modules.reduce((acc, module) => acc + module.duration, 0),
+  lessons: course.modules.reduce(
+    (acc, module) => acc + module._count.lessons,
+    0
+  ),
+  level: course.level,
+  numberOfStudents: course.soldCount,
+  price: course.price,
+  thumbnail: course.imageUrl,
+  title: course.title,
+  discountPercentage: course.discount,
+});
