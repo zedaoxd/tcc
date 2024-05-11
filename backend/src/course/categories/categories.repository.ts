@@ -51,4 +51,18 @@ export class CategoryRepository {
       take: 10,
     });
   }
+
+  async findCategoriesWithCoursesSize() {
+    return await this.prisma.category.findMany({
+      select: {
+        id: true,
+        name: true,
+        _count: {
+          select: {
+            courses: true,
+          },
+        },
+      },
+    });
+  }
 }

@@ -34,6 +34,11 @@ export class CategoriesController {
     return this.categoriesService.findTopCategories();
   }
 
+  @Get('categories-with-courses-size')
+  findCategoriesWithCoursesSize() {
+    return this.categoriesService.findCategoriesWithCoursesSize();
+  }
+
   @Get()
   findAll() {
     return this.categoriesService.findAll();

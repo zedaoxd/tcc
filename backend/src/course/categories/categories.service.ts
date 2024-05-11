@@ -34,4 +34,8 @@ export class CategoriesService {
   async findTopCategories() {
     return await this.repository.findTopCategories();
   }
+
+  async findCategoriesWithCoursesSize() {
+    return await this.repository.findCategoriesWithCoursesSize();
+  }
 }
