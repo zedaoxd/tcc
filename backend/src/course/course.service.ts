@@ -88,4 +88,8 @@ export class CourseService {
   async findGroupedByRating() {
     return await this.repository.findGroupedByRating();
   }
+
+  async findGroupedByLevel() {
+    return await this.repository.findGroupedByLevel();
+  }
 }

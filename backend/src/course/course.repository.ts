@@ -198,4 +198,18 @@ export class CourseRepository {
 
     return ratings;
   }
+
+  async findGroupedByLevel() {
+    const levels = await this.prisma.course.groupBy({
+      by: ['level'],
+      where: {
+        published: true,
+      },
+      _count: {
+        level: true,
+      },
+    });
+
+    return levels;
+  }
 }
