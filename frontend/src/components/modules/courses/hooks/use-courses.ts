@@ -3,7 +3,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { getPaginatedCourses, getUsersPublishedCourses } from "../service";
 import { useState } from "react";
-import { getCategoriesWithCoursesSize } from "../categories/service";
+import {
+  getCategoriesWithCoursesSize,
+  getGroupedByRating,
+  getQuantityPricesTypes,
+} from "../categories/service";
 
 type CoursesProps = {
   page?: number;
@@ -26,8 +30,10 @@ type UseCourses = {
     page: number;
     totalPages: number;
   };
-  categories: Course.Category.Model[] | undefined;
-  instructors: User.HavePublishedCourses[] | undefined;
+  categories: Course.Category.Model[];
+  instructors: User.HavePublishedCourses[];
+  prices: Course.Price[];
+  ratings: Course.Rating[];
 };
 
 export const useCourses = ({
@@ -39,6 +45,22 @@ export const useCourses = ({
     page: page,
     search: search,
     size: size,
+  });
+
+  const { data: ratings } = useQuery({
+    queryKey: ["getGroupedByRating"],
+    queryFn: getGroupedByRating,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
+
+  const { data: prices } = useQuery({
+    queryKey: ["getQuantityPricesTypes"],
+    queryFn: getQuantityPricesTypes,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 
   const { data: categories } = useQuery({
@@ -110,7 +132,9 @@ export const useCourses = ({
       page: courses?.page ?? 1,
       totalPages: courses?.totalPages ?? 1,
     },
-    categories,
-    instructors,
+    categories: categories ?? [],
+    instructors: instructors ?? [],
+    prices: prices ?? [],
+    ratings: ratings ?? [],
   };
 };

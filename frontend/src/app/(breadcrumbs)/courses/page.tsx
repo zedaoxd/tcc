@@ -26,26 +26,15 @@ type CoursesProps = {
 export default function Courses({ searchParams }: CoursesProps) {
   const { listType } = searchParams;
 
-  const { courses, pageControl, pageStatus, categories, instructors } =
-    useCourses();
-
-  const price = [
-    {
-      id: "b1deb8d4-4eb5-4b94-aa9c-db5d3fdf11bc",
-      name: "All",
-      size: 100,
-    },
-    {
-      id: "b1deb8d4-4eb5-4b94-aa9c-db5d3fdf11bh",
-      name: "Free",
-      size: 10,
-    },
-    {
-      id: "89df3d62-56da-4362-bc27-091926ddca60",
-      name: "Paid",
-      size: 90,
-    },
-  ];
+  const {
+    courses,
+    pageControl,
+    pageStatus,
+    categories,
+    instructors,
+    prices,
+    ratings,
+  } = useCourses();
 
   const level = [
     {
@@ -67,29 +56,6 @@ export default function Courses({ searchParams }: CoursesProps) {
       id: "f89df721-7b28-425e-9dce-0dd8efecee3d",
       name: "Expert",
       size: 90,
-    },
-  ];
-
-  const rating = [
-    {
-      rating: 5,
-      size: Math.floor(Math.random() * 100),
-    },
-    {
-      rating: 4,
-      size: Math.floor(Math.random() * 100),
-    },
-    {
-      rating: 3,
-      size: Math.floor(Math.random() * 100),
-    },
-    {
-      rating: 2,
-      size: Math.floor(Math.random() * 100),
-    },
-    {
-      rating: 1,
-      size: Math.floor(Math.random() * 100),
     },
   ];
 
@@ -125,7 +91,7 @@ export default function Courses({ searchParams }: CoursesProps) {
 
         <div className="flex flex-col gap-4">
           <Filter
-            items={categories || []}
+            items={categories}
             title="Course Category"
             searchParams={searchParams}
             paramKey="category"
@@ -134,7 +100,7 @@ export default function Courses({ searchParams }: CoursesProps) {
 
           <Show when={!!instructors && instructors.length > 0}>
             <Filter
-              items={instructors || []}
+              items={instructors}
               title="Instructors"
               searchParams={searchParams}
               paramKey="author"
@@ -142,21 +108,21 @@ export default function Courses({ searchParams }: CoursesProps) {
             />
           </Show>
 
-          {/* <Filter
-            items={price}
+          <Filter
+            items={prices}
             title="Price"
             searchParams={searchParams}
             paramKey="price"
             initialChecked={searchParams.price}
-          /> */}
+          />
 
-          {/* <Filter
-            items={rating}
+          <Filter
+            items={ratings}
             title="Review"
             searchParams={searchParams}
             paramKey="review"
             initialChecked={searchParams.review}
-          /> */}
+          />
 
           {/* <Filter
             items={level}

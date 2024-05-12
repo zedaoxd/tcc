@@ -16,6 +16,17 @@ namespace Course {
     level: string;
   };
 
+  type Price = {
+    id: string;
+    name: string;
+    quantity: number;
+  };
+
+  type Rating = {
+    rating: number;
+    quantity: number;
+  };
+
   namespace Category {
     type Model = {
       id: string;
