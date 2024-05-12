@@ -176,4 +176,26 @@ export class CourseRepository {
       all: paidCourses + freeCourses,
     };
   }
+
+  async findGroupedByRating() {
+    const ratings = await this.prisma.course.groupBy({
+      by: ['rating'],
+      where: {
+        published: true,
+        rating: {
+          not: {
+            equals: 0,
+          },
+        },
+      },
+      _count: {
+        rating: true,
+      },
+      orderBy: {
+        rating: 'desc',
+      },
+    });
+
+    return ratings;
+  }
 }

@@ -84,4 +84,8 @@ export class CourseService {
   async findQuantityPricesTypes() {
     return await this.repository.findQuantityPricesTypes();
   }
+
+  async findGroupedByRating() {
+    return await this.repository.findGroupedByRating();
+  }
 }

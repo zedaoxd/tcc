@@ -54,6 +54,11 @@ export class CourseController {
     return this.courseService.findTopPurchased();
   }
 
+  @Get('grouped-by-rating')
+  findGroupedByRating() {
+    return this.courseService.findGroupedByRating();
+  }
+
   @Get()
   findAll(
     @Query('page', new DefaultValuePipe(1), OneOrGreaterPipe) page: number,
