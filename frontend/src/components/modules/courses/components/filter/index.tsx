@@ -1,20 +1,24 @@
-import Link from "next/link";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Rating } from "@smastrom/react-rating";
+"use client";
 
-type Item =
+import { RadioGroup } from "@/components/ui/radio-group";
+import { Option } from "./components/Option";
+import Show from "@/lib/show";
+import { Button } from "@/components/ui/button";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { useState } from "react";
+
+export type Item =
   | {
       id: string;
       name: string;
-      size: number;
+      quantity: number;
     }
   | {
       rating: number;
-      size: number;
+      quantity: number;
     };
 
-type SearchParams = { [key: string]: string | string[] | undefined };
+export type SearchParams = { [key: string]: string | string[] | undefined };
 
 type Props = {
   title: string;
@@ -22,31 +26,7 @@ type Props = {
   searchParams: SearchParams;
   paramKey: string;
   initialChecked?: string;
-};
-
-const renderRating = (rating: number) => {
-  return (
-    <div className="flex items-center space-x-2">
-      <RadioGroupItem value={rating.toString()} id={rating.toString()} />
-      <Label htmlFor={rating.toString()}>
-        <Rating
-          className="cursor-pointer"
-          value={rating}
-          readOnly
-          style={{ maxWidth: 100 }}
-        />
-      </Label>
-    </div>
-  );
-};
-
-const renderName = (id: string, name: string) => {
-  return (
-    <div className="flex items-center space-x-2">
-      <RadioGroupItem value={id} id={id} />
-      <Label htmlFor={id}>{name}</Label>
-    </div>
-  );
+  maxOptionsShow?: number;
 };
 
 export default function Filter({
@@ -55,58 +35,50 @@ export default function Filter({
   searchParams,
   paramKey,
   initialChecked,
+  maxOptionsShow = 5,
 }: Props) {
+  const [showAllOptions, setShowAllOptions] = useState(
+    items.length > maxOptionsShow
+  );
+
+  const itemsToShow = showAllOptions ? items : items.slice(0, maxOptionsShow);
+
   return (
-    <div className="w-full flex flex-col gap-5">
+    <div className="w-full flex flex-col gap-5 overflow-hidden">
       <h4 className="text-xl font-semibold leading-6 capitalize">{title}</h4>
 
-      <RadioGroup defaultValue={initialChecked}>
-        {items.map((item, index) => (
-          <Filter.Option
-            key={index}
-            searchParams={searchParams}
-            paramKey={paramKey}
-            item={item}
-          />
-        ))}
-      </RadioGroup>
+      <div
+        className={`${
+          showAllOptions || items.length <= maxOptionsShow ? "h-auto" : "h-40"
+        }`}
+      >
+        <RadioGroup defaultValue={initialChecked}>
+          {itemsToShow.map((item, index) => (
+            <Option
+              item={item}
+              paramKey={paramKey}
+              searchParams={searchParams}
+              key={index}
+            />
+          ))}
+        </RadioGroup>
+
+        <Show when={items.length > maxOptionsShow}>
+          <div className="flex justify-center items-center bg-gradient-to-b bg-neutral-100 from-white">
+            <Button
+              size="auto"
+              variant="none"
+              onClick={() => setShowAllOptions((prev) => !prev)}
+            >
+              {showAllOptions ? (
+                <ChevronUp className="w-4 h-4" />
+              ) : (
+                <ChevronDown className="w-4 h-4" />
+              )}
+            </Button>
+          </div>
+        </Show>
+      </div>
     </div>
   );
 }
-
-type FilterOptions = {
-  searchParams: SearchParams;
-  paramKey: string;
-  item: Item;
-};
-
-Filter.Option = function FilterOption({
-  searchParams,
-  paramKey,
-  item,
-}: FilterOptions) {
-  return (
-    <Link
-      href={{
-        pathname: "/courses",
-        query: {
-          ...searchParams,
-          [paramKey]: "name" in item ? item.id : item.rating,
-        },
-      }}
-      className="flex justify-between items-center"
-    >
-      {"name" in item
-        ? renderName(item.id, item.name)
-        : renderRating(item.rating)}
-
-      <span
-        className="text-sm font-medium text-gray-500"
-        // TODO: why this warning appears?
-        suppressHydrationWarning
-      >
-        {item.size}
-      </span>
-    </Link>
-  );
-};

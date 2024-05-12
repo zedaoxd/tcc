@@ -5,13 +5,31 @@ import { CourseRepository } from './course.repository';
 import { PaginatedDto } from 'src/shared/paginated-dto';
 import { SimpleCourseDto } from './dto/simple-course.dto';
 import { FullCourseDto } from './dto/full-course.dto';
+import { UploadService } from 'src/upload/upload.service';
 
 @Injectable()
 export class CourseService {
-  constructor(private readonly repository: CourseRepository) {}
+  constructor(
+    private readonly repository: CourseRepository,
+    private readonly uploadService: UploadService,
+  ) {}
 
-  async create(createCurseDto: CreateCourseDto, authorId: string) {
-    return await this.repository.create(createCurseDto, authorId);
+  async create(
+    createCurseDto: CreateCourseDto,
+    authorId: string,
+    image: Express.Multer.File,
+  ) {
+    const imageUrl = await this.uploadService.uploadFile(image, 'video-thumbs');
+
+    return this.repository.create({
+      authorId,
+      imageUrl,
+      categoryId: createCurseDto.categoryId,
+      description: createCurseDto.description,
+      price: createCurseDto.price,
+      title: createCurseDto.title,
+      level: createCurseDto.level,
+    });
   }
 
   async findAll(

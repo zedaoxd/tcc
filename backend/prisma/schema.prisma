@@ -93,6 +93,7 @@ model Course {
   faqs        FAQ[]
   preview     Boolean     @default(false)
   level       CourseLevel @default(beginner)
+  published   Boolean     @default(false)
 
   createdAt DateTime @default(now()) @db.DateTime(6)
   updatedAt DateTime @updatedAt @db.DateTime(6)

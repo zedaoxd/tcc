@@ -18,6 +18,9 @@ const config = {
       },
     },
     extend: {
+      transitionProperty: {
+        height: "height",
+      },
       backgroundImage: {
         home: "url('/images/home-girl.svg')",
         "default-ad-home-banner": "url('/images/default-ad-home-banner.svg')",

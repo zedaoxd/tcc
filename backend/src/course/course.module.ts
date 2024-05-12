@@ -5,10 +5,11 @@ import { CategoriesModule } from './categories/categories.module';
 import { CourseRepository } from './course.repository';
 import { PrismaService } from 'src/prisma.service';
 import { PurchaseModule } from './purchase/purchase.module';
+import { UploadService } from 'src/upload/upload.service';
 
 @Module({
   controllers: [CourseController],
-  providers: [CourseService, CourseRepository, PrismaService],
+  providers: [CourseService, CourseRepository, PrismaService, UploadService],
   imports: [CategoriesModule, PurchaseModule],
 })
 export class CourseModule {}

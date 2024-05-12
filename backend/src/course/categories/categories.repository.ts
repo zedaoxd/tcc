@@ -59,7 +59,18 @@ export class CategoryRepository {
         name: true,
         _count: {
           select: {
-            courses: true,
+            courses: {
+              where: {
+                published: true,
+              },
+            },
+          },
+        },
+      },
+      where: {
+        courses: {
+          some: {
+            published: true,
           },
         },
       },

@@ -68,6 +68,29 @@ export async function getPaginatedCourses(
   };
 }
 
+type GetUsersHavePublishedCourses = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  _count: {
+    coursesCreated: number;
+  };
+};
+
+export async function getUsersPublishedCourses(): Promise<
+  User.HavePublishedCourses[]
+> {
+  const response = await api.get<GetUsersHavePublishedCourses[]>(
+    "/users/published-courses"
+  );
+
+  return response.data.map((user) => ({
+    id: user.id,
+    name: `${user.firstName} ${user.lastName}`,
+    quantity: user._count.coursesCreated,
+  }));
+}
+
 const mapCourse = (course: GetPaginatedCourses): Course.Model => ({
   id: course.id,
   author: `${course.author.firstName} ${course.author.lastName}`,

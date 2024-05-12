@@ -1,18 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { CreateCourseDto } from './dto/create-course.dto';
+// import { CreateCourseDto } from './dto/create-course.dto';
 import { PaginatedDto } from 'src/shared/paginated-dto';
 import { SimpleCourseDto } from './dto/simple-course.dto';
 import { FullCourseDto } from './dto/full-course.dto';
 import { UpdateCourseDto } from './dto/update-curse.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class CourseRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(dto: CreateCourseDto, authorId: string) {
+  async create(data: Prisma.CourseCreateManyInput) {
     return await this.prisma.course.create({
-      data: { ...dto, authorId },
+      data,
     });
   }
 
@@ -26,6 +27,7 @@ export class CourseRepository {
         title: {
           contains: search,
         },
+        published: true,
       },
     });
 
@@ -34,6 +36,7 @@ export class CourseRepository {
         title: {
           contains: search,
         },
+        published: true,
       },
       select: {
         id: true,

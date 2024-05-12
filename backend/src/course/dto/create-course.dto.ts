@@ -1,11 +1,4 @@
-import {
-  IsNotEmpty,
-  IsOptional,
-  IsPositive,
-  Max,
-  MaxLength,
-  Min,
-} from 'class-validator';
+import { IsEnum, IsNotEmpty, IsOptional, MaxLength } from 'class-validator';
 
 export class CreateCourseDto {
   @IsNotEmpty()
@@ -16,10 +9,6 @@ export class CreateCourseDto {
   description: string;
 
   @IsNotEmpty()
-  @MaxLength(255)
-  imageUrl: string;
-
-  @IsPositive()
   price: number;
 
   @IsNotEmpty()
@@ -27,9 +16,11 @@ export class CreateCourseDto {
   categoryId: string;
 
   @IsOptional()
-  @Min(0)
-  @Max(1)
   discount: number;
+
+  @IsOptional()
+  @IsEnum(['beginner', 'intermediate', 'advanced'])
+  level: 'beginner' | 'intermediate' | 'advanced';
 
   @IsOptional()
   preview: boolean;

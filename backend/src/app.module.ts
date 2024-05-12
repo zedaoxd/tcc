@@ -12,6 +12,8 @@ import { GlobalLoggerInterceptor } from './interceptors/global-logger/global-log
 import { SendEmailModule } from './send-email/send-email.module';
 import { BullModule } from '@nestjs/bull';
 import { MercadoPagoService } from './mercado-pago/mercado-pago.service';
+import { UsersModule } from './users/users.module';
+import { UploadService } from './upload/upload.service';
 
 @Module({
   imports: [
@@ -31,6 +33,7 @@ import { MercadoPagoService } from './mercado-pago/mercado-pago.service';
     CourseModule,
     SendEmailModule,
     AuthModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [
@@ -48,6 +51,7 @@ import { MercadoPagoService } from './mercado-pago/mercado-pago.service';
     },
     ConsoleLogger,
     MercadoPagoService,
+    UploadService,
   ],
 })
 export class AppModule {}

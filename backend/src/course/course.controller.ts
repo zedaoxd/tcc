@@ -12,6 +12,8 @@ import {
   DefaultValuePipe,
   Res,
   HttpStatus,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { CourseService } from './course.service';
 import { CreateCourseDto } from './dto/create-course.dto';
@@ -23,6 +25,8 @@ import { FullCourseDto } from './dto/full-course.dto';
 import { IsAuthorOrAdminGuard } from './guards/is-author-or-admin/is-author-or-admin.guard';
 import { Response } from 'express';
 import { OneOrGreaterPipe } from './pipes/one-or-greater/one-or-greater.pipe';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { TransformPropertyNumberPipe } from './pipes/transform-property-number/transform-property-number.pipe';
 
 @Controller('courses')
 export class CourseController {
@@ -30,11 +34,14 @@ export class CourseController {
 
   @Post()
   @UseGuards(JwtGuard)
+  @UseInterceptors(FileInterceptor('image'))
   create(
-    @Body() createCurseDto: CreateCourseDto,
-    @Req() { user: { id } }: IRequest,
+    @UploadedFile() image: Express.Multer.File,
+    @Body(new TransformPropertyNumberPipe(['price', 'discount']))
+    createCurseDto: CreateCourseDto,
+    @Req() { user: { id: currentUserId } }: IRequest,
   ) {
-    return this.courseService.create(createCurseDto, id);
+    return this.courseService.create(createCurseDto, currentUserId, image);
   }
 
   @Get('top-purchased')

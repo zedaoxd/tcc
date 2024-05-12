@@ -1,8 +1,9 @@
 "use client";
 
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getPaginatedCourses } from "../service";
+import { useQuery } from "@tanstack/react-query";
+import { getPaginatedCourses, getUsersPublishedCourses } from "../service";
 import { useState } from "react";
+import { getCategoriesWithCoursesSize } from "../categories/service";
 
 type CoursesProps = {
   page?: number;
@@ -25,6 +26,8 @@ type UseCourses = {
     page: number;
     totalPages: number;
   };
+  categories: Course.Category.Model[] | undefined;
+  instructors: User.HavePublishedCourses[] | undefined;
 };
 
 export const useCourses = ({
@@ -38,7 +41,21 @@ export const useCourses = ({
     size: size,
   });
 
-  const queryClient = useQueryClient();
+  const { data: categories } = useQuery({
+    queryKey: ["getCategoriesWithCoursesSize"],
+    queryFn: getCategoriesWithCoursesSize,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
+
+  const { data: instructors } = useQuery({
+    queryKey: ["getUsersPublishedCourses"],
+    queryFn: getUsersPublishedCourses,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
 
   const {
     data: courses,
@@ -58,10 +75,6 @@ export const useCourses = ({
       ...prev,
       page: page,
     }));
-
-    queryClient.invalidateQueries({
-      queryKey: ["getPaginatedCourses", paginationState],
-    });
   };
 
   const nextPage = () => {
@@ -97,5 +110,7 @@ export const useCourses = ({
       page: courses?.page ?? 1,
       totalPages: courses?.totalPages ?? 1,
     },
+    categories,
+    instructors,
   };
 };

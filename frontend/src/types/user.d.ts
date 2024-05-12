@@ -10,4 +10,10 @@ namespace User {
     username: string;
     password: string;
   };
+
+  type HavePublishedCourses = {
+    id: string;
+    name: string;
+    quantity: number;
+  };
 }

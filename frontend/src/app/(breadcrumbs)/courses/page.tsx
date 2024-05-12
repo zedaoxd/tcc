@@ -26,63 +26,8 @@ type CoursesProps = {
 export default function Courses({ searchParams }: CoursesProps) {
   const { listType } = searchParams;
 
-  const { courses, pageControl, pageStatus } = useCourses();
-
-  const categories = [
-    {
-      id: "b1deb8d4-4eb5-4b94-aa9c-db5d3fdf11bc",
-      name: "Development",
-      size: Math.floor(Math.random() * 100),
-    },
-    {
-      id: "89df3d62-56da-4362-bc27-091926ddca60",
-      name: "Art & Design",
-      size: Math.floor(Math.random() * 100),
-    },
-    {
-      id: "f89df721-7b28-425e-9dce-0dd8efecee3d",
-      name: "Photography",
-      size: Math.floor(Math.random() * 100),
-    },
-    {
-      id: "deb0a58f-cbe2-422e-8e6c-f96cba5f6642",
-      name: "Communication",
-      size: Math.floor(Math.random() * 100),
-    },
-    {
-      id: "6c9346ff-2e04-4633-a2aa-6c885abd3f8e",
-      name: "Finance",
-      size: Math.floor(Math.random() * 100),
-    },
-  ];
-
-  const instructors = [
-    {
-      id: "b1deb8d4-4eb5-4b94-aa9c-db5d3fdf11bc",
-      name: "Bruno L.",
-      size: Math.floor(Math.random() * 100),
-    },
-    {
-      id: "89df3d62-56da-4362-bc27-091926ddca60",
-      name: "John Doe",
-      size: Math.floor(Math.random() * 100),
-    },
-    {
-      id: "f89df721-7b28-425e-9dce-0dd8efecee3d",
-      name: "Jennifer M.",
-      size: Math.floor(Math.random() * 100),
-    },
-    {
-      id: "deb0a58f-cbe2-422e-8e6c-f96cba5f6642",
-      name: "Brenda Tejeda",
-      size: Math.floor(Math.random() * 100),
-    },
-    {
-      id: "6c9346ff-2e04-4633-a2aa-6c885abd3f8e",
-      name: "Bob Ross",
-      size: Math.floor(Math.random() * 100),
-    },
-  ];
+  const { courses, pageControl, pageStatus, categories, instructors } =
+    useCourses();
 
   const price = [
     {
@@ -180,44 +125,46 @@ export default function Courses({ searchParams }: CoursesProps) {
 
         <div className="flex flex-col gap-4">
           <Filter
-            items={categories}
+            items={categories || []}
             title="Course Category"
             searchParams={searchParams}
             paramKey="category"
             initialChecked={searchParams.category}
           />
 
-          <Filter
-            items={instructors}
-            title="Instructors"
-            searchParams={searchParams}
-            paramKey="author"
-            initialChecked={searchParams.author}
-          />
+          <Show when={!!instructors && instructors.length > 0}>
+            <Filter
+              items={instructors || []}
+              title="Instructors"
+              searchParams={searchParams}
+              paramKey="author"
+              initialChecked={searchParams.author}
+            />
+          </Show>
 
-          <Filter
+          {/* <Filter
             items={price}
             title="Price"
             searchParams={searchParams}
             paramKey="price"
             initialChecked={searchParams.price}
-          />
+          /> */}
 
-          <Filter
+          {/* <Filter
             items={rating}
             title="Review"
             searchParams={searchParams}
             paramKey="review"
             initialChecked={searchParams.review}
-          />
+          /> */}
 
-          <Filter
+          {/* <Filter
             items={level}
             title="Level"
             searchParams={searchParams}
             paramKey="level"
             initialChecked={searchParams.level}
-          />
+          /> */}
         </div>
       </div>
     </div>
