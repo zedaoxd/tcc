@@ -46,7 +46,7 @@ Option.RenderRating = function RenderRating({ rating }: { rating: number }) {
   return (
     <div className="flex items-center space-x-2">
       <RadioGroupItem value={rating.toString()} id={rating.toString()} />
-      <Label htmlFor={rating.toString()}>
+      <Label htmlFor={rating.toString()} onClick={(e) => e.stopPropagation()}>
         <Rating
           className="cursor-pointer"
           value={rating}
