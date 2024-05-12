@@ -80,4 +80,8 @@ export class CourseService {
   async findTopPurchased() {
     return await this.repository.findTopPurchased();
   }
+
+  async findQuantityPricesTypes() {
+    return await this.repository.findQuantityPricesTypes();
+  }
 }

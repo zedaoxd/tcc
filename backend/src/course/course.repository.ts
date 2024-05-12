@@ -150,4 +150,30 @@ export class CourseRepository {
       },
     });
   }
+
+  async findQuantityPricesTypes() {
+    const paidCourses = await this.prisma.course.count({
+      where: {
+        published: true,
+        AND: {
+          NOT: { OR: [{ discount: { equals: 1 } }, { price: { equals: 0 } }] },
+        },
+      },
+    });
+
+    const freeCourses = await this.prisma.course.count({
+      where: {
+        published: true,
+        AND: {
+          OR: [{ discount: { equals: 1 } }, { price: { equals: 0 } }],
+        },
+      },
+    });
+
+    return {
+      paid: paidCourses,
+      free: freeCourses,
+      all: paidCourses + freeCourses,
+    };
+  }
 }

@@ -44,6 +44,11 @@ export class CourseController {
     return this.courseService.create(createCurseDto, currentUserId, image);
   }
 
+  @Get('quantity-prices-types')
+  findQuantityPricesTypes() {
+    return this.courseService.findQuantityPricesTypes();
+  }
+
   @Get('top-purchased')
   findTopPurchased() {
     return this.courseService.findTopPurchased();
