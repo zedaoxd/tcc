@@ -34,30 +34,8 @@ export default function Courses({ searchParams }: CoursesProps) {
     instructors,
     prices,
     ratings,
+    levels,
   } = useCourses();
-
-  const level = [
-    {
-      id: "b1deb8d4-4eb5-4b94-aa9c-db5d3fdf11bc",
-      name: "All",
-      size: 220,
-    },
-    {
-      id: "b1deb8d4-4eb5-4b94-aa9c-db5d3fdf11bs",
-      name: "Beginner",
-      size: 100,
-    },
-    {
-      id: "89df3d62-56da-4362-bc27-091926ddca60",
-      name: "Intermidiate",
-      size: 30,
-    },
-    {
-      id: "f89df721-7b28-425e-9dce-0dd8efecee3d",
-      name: "Expert",
-      size: 90,
-    },
-  ];
 
   return (
     <div className="container mt-10">
@@ -113,7 +91,7 @@ export default function Courses({ searchParams }: CoursesProps) {
             title="Price"
             searchParams={searchParams}
             paramKey="price"
-            initialChecked={searchParams.price}
+            initialChecked={searchParams.price ?? "all"}
           />
 
           <Filter
@@ -124,13 +102,13 @@ export default function Courses({ searchParams }: CoursesProps) {
             initialChecked={searchParams.review}
           />
 
-          {/* <Filter
-            items={level}
+          <Filter
+            items={levels}
             title="Level"
             searchParams={searchParams}
             paramKey="level"
             initialChecked={searchParams.level}
-          /> */}
+          />
         </div>
       </div>
     </div>

@@ -5,6 +5,7 @@ import { getPaginatedCourses, getUsersPublishedCourses } from "../service";
 import { useState } from "react";
 import {
   getCategoriesWithCoursesSize,
+  getGroupedByLevel,
   getGroupedByRating,
   getQuantityPricesTypes,
 } from "../categories/service";
@@ -34,6 +35,7 @@ type UseCourses = {
   instructors: User.HavePublishedCourses[];
   prices: Course.Price[];
   ratings: Course.Rating[];
+  levels: Course.Level[];
 };
 
 export const useCourses = ({
@@ -45,6 +47,14 @@ export const useCourses = ({
     page: page,
     search: search,
     size: size,
+  });
+
+  const { data: levels } = useQuery({
+    queryKey: ["getGroupedByLevel"],
+    queryFn: getGroupedByLevel,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 
   const { data: ratings } = useQuery({
@@ -136,5 +146,6 @@ export const useCourses = ({
     instructors: instructors ?? [],
     prices: prices ?? [],
     ratings: ratings ?? [],
+    levels: levels ?? [],
   };
 };

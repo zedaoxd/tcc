@@ -22,6 +22,12 @@ namespace Course {
     quantity: number;
   };
 
+  type Level = {
+    id: string;
+    name: string;
+    quantity: number;
+  };
+
   type Rating = {
     rating: number;
     quantity: number;

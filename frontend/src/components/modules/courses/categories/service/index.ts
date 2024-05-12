@@ -73,3 +73,20 @@ export async function getGroupedByRating(): Promise<Course.Rating[]> {
     quantity: rating._count.rating,
   }));
 }
+
+type GetGroupedByLevel = {
+  level: string;
+  _count: { level: number };
+};
+
+export async function getGroupedByLevel(): Promise<Course.Level[]> {
+  const response = await api.get<GetGroupedByLevel[]>(
+    "/courses/grouped-by-level"
+  );
+
+  return response.data.map((level) => ({
+    id: level.level,
+    name: level.level,
+    quantity: level._count.level,
+  }));
+}
