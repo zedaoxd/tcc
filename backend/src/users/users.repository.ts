@@ -30,4 +30,28 @@ export class UserRepository {
       },
     });
   }
+
+  async isAuthor(id: string) {
+    const author = await this.prisma.user.findUnique({
+      where: {
+        id,
+        AND: {
+          coursesCreated: {
+            some: {
+              published: true,
+            },
+          },
+        },
+      },
+      select: {
+        _count: {
+          select: {
+            coursesCreated: true,
+          },
+        },
+      },
+    });
+
+    return author._count.coursesCreated > 0;
+  }
 }
