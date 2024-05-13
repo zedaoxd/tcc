@@ -6,6 +6,7 @@ import { PaginatedDto } from 'src/shared/paginated-dto';
 import { SimpleCourseDto } from './dto/simple-course.dto';
 import { FullCourseDto } from './dto/full-course.dto';
 import { UploadService } from 'src/upload/upload.service';
+import { FindAllQueryDto } from './dto/find-all-query.dto';
 
 @Injectable()
 export class CourseService {
@@ -33,11 +34,9 @@ export class CourseService {
   }
 
   async findAll(
-    page: number,
-    size: number,
-    search: string,
+    query: FindAllQueryDto,
   ): Promise<PaginatedDto<SimpleCourseDto>> {
-    return await this.repository.findAll(page, size, search);
+    return await this.repository.findAll(query);
   }
 
   async findOne(id: string): Promise<FullCourseDto> {

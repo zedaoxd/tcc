@@ -6,6 +6,7 @@ import { SimpleCourseDto } from './dto/simple-course.dto';
 import { FullCourseDto } from './dto/full-course.dto';
 import { UpdateCourseDto } from './dto/update-curse.dto';
 import { Prisma } from '@prisma/client';
+import { FindAllQueryDto } from './dto/find-all-query.dto';
 
 @Injectable()
 export class CourseRepository {
@@ -17,27 +18,56 @@ export class CourseRepository {
     });
   }
 
-  async findAll(
-    page: number,
-    size: number,
-    search: string,
-  ): Promise<PaginatedDto<SimpleCourseDto>> {
-    const totalItems = await this.prisma.course.count({
-      where: {
-        title: {
-          contains: search,
-        },
-        published: true,
-      },
-    });
+  async findAll({
+    page = 1,
+    size = 20,
+    search = '',
+    author: authorId,
+    category: categoryId,
+    level,
+    price = 'all',
+    rating,
+  }: FindAllQueryDto): Promise<PaginatedDto<SimpleCourseDto>> {
+    const where: Prisma.CourseWhereInput = {
+      published: true,
+    };
+
+    if (search) {
+      where.title = {
+        contains: search,
+      };
+    }
+
+    if (authorId) {
+      where.authorId = authorId;
+    }
+
+    if (categoryId) {
+      where.categoryId = categoryId;
+    }
+
+    if (level) {
+      where.level = level.trim() as Prisma.EnumCourseLevelFilter;
+    }
+
+    if (price === 'free') {
+      where.OR = [{ discount: 1 }, { price: 0 }];
+    }
+
+    if (price === 'paid') {
+      where.NOT = { OR: [{ discount: 1 }, { price: 0 }] };
+    }
+
+    if (rating) {
+      where.rating = {
+        gte: rating,
+      };
+    }
+
+    const totalItems = await this.prisma.course.count({ where });
 
     const itens = await this.prisma.course.findMany({
-      where: {
-        title: {
-          contains: search,
-        },
-        published: true,
-      },
+      where,
       select: {
         id: true,
         level: true,

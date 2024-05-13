@@ -9,7 +9,6 @@ import {
   UseGuards,
   Req,
   Query,
-  DefaultValuePipe,
   Res,
   HttpStatus,
   UseInterceptors,
@@ -19,14 +18,12 @@ import { CourseService } from './course.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-curse.dto';
 import { JwtGuard } from 'src/auth/jwt/jwt.guard';
-import { PaginatedDto } from 'src/shared/paginated-dto';
-import { SimpleCourseDto } from './dto/simple-course.dto';
 import { FullCourseDto } from './dto/full-course.dto';
 import { IsAuthorOrAdminGuard } from './guards/is-author-or-admin/is-author-or-admin.guard';
 import { Response } from 'express';
-import { OneOrGreaterPipe } from './pipes/one-or-greater/one-or-greater.pipe';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { TransformPropertyNumberPipe } from './pipes/transform-property-number/transform-property-number.pipe';
+import { FindAllQueryDto } from './dto/find-all-query.dto';
 
 @Controller('courses')
 export class CourseController {
@@ -65,12 +62,8 @@ export class CourseController {
   }
 
   @Get()
-  findAll(
-    @Query('page', new DefaultValuePipe(1), OneOrGreaterPipe) page: number,
-    @Query('size', new DefaultValuePipe(20)) size: number,
-    @Query('search', new DefaultValuePipe('')) search: string,
-  ): Promise<PaginatedDto<SimpleCourseDto>> {
-    return this.courseService.findAll(page, size, search);
+  findAll(@Query() query: FindAllQueryDto) {
+    return this.courseService.findAll(query);
   }
 
   @Get(':id')
