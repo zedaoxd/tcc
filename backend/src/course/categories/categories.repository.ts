@@ -21,7 +21,7 @@ export class CategoryRepository {
   }
 
   async findOne(id: string) {
-    return await this.prisma.category.findUniqueOrThrow({ where: { id } });
+    return await this.prisma.category.findUnique({ where: { id } });
   }
 
   async update(id: string, data: UpdateCategoryDto) {

@@ -13,5 +13,6 @@ import { IsUniqueCategoryValidator } from './validator/is-unique-category-valida
     PrismaService,
     IsUniqueCategoryValidator,
   ],
+  exports: [CategoryRepository],
 })
 export class CategoriesModule {}
