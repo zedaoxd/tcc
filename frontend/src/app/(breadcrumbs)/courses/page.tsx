@@ -35,7 +35,7 @@ export default function Courses({ searchParams }: CoursesProps) {
     prices,
     ratings,
     levels,
-  } = useCourses();
+  } = useCourses(searchParams);
 
   return (
     <div className="container mt-10">

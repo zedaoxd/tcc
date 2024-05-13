@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { getPaginatedCourses, getUsersPublishedCourses } from "../service";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   getCategoriesWithCoursesSize,
   getGroupedByLevel,
@@ -10,10 +10,26 @@ import {
   getQuantityPricesTypes,
 } from "../categories/service";
 
-type CoursesProps = {
+type Props = {
   page?: number;
   size?: number;
   search?: string;
+  category?: string;
+  author?: string;
+  price?: string;
+  rating?: string;
+  level?: string;
+};
+
+type CousePaginated = {
+  page: number;
+  size: number;
+  search?: string;
+  category?: string;
+  author?: string;
+  price?: string;
+  rating?: string;
+  level?: string;
 };
 
 type UseCourses = {
@@ -38,16 +54,19 @@ type UseCourses = {
   levels: Course.Level[];
 };
 
-export const useCourses = ({
-  page = 1,
-  search = "",
-  size = 6,
-}: CoursesProps = {}): UseCourses => {
-  const [paginationState, setPaginationState] = useState({
-    page: page,
-    search: search,
-    size: size,
+export const useCourses = (props: Props): UseCourses => {
+  const [paginationState, setPaginationState] = useState<CousePaginated>({
+    ...props,
+    page: props.page ?? 1,
+    size: 6,
   });
+
+  useEffect(() => {
+    setPaginationState((prev) => ({
+      ...prev,
+      ...props,
+    }));
+  }, [props]);
 
   const { data: levels } = useQuery({
     queryKey: ["getGroupedByLevel"],
@@ -114,7 +133,7 @@ export const useCourses = ({
 
     setPaginationState((prev) => ({
       ...prev,
-      page: paginationState.page + 1,
+      page: prev.page + 1,
     }));
   };
 

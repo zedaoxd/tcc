@@ -47,19 +47,36 @@ type GetPaginatedCoursesParams = {
   page: number;
   size: number;
   search: string;
+  category: string;
+  author: string;
+  price: string;
+  rating: string;
+  level: string;
 };
 
 export async function getPaginatedCourses(
-  getParams: GetPaginatedCoursesParams
+  getParams: Partial<GetPaginatedCoursesParams>
 ): Promise<Paginated<Course.Model>> {
-  const params = new URLSearchParams({
-    page: getParams.page.toString(),
-    size: getParams.size.toString(),
-    search: getParams.search,
-  }).toString();
+  const params = new URLSearchParams();
+
+  if (getParams.page) params.append("page", getParams.page.toString());
+
+  if (getParams.size) params.append("size", getParams.size.toString());
+
+  if (getParams.search) params.append("search", getParams.search);
+
+  if (getParams.category) params.append("category", getParams.category);
+
+  if (getParams.author) params.append("author", getParams.author);
+
+  if (getParams.price) params.append("price", getParams.price);
+
+  if (getParams.rating) params.append("rating", getParams.rating);
+
+  if (getParams.level) params.append("level", getParams.level);
 
   const response = await api.get<Paginated<GetPaginatedCourses>>(
-    `/courses?${params}`
+    `/courses?${params.toString()}`
   );
 
   return {
