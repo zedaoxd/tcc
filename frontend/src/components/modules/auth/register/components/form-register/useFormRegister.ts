@@ -5,7 +5,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useState } from "react";
-import useAuth from "@/zustand/auth";
 import { emailInUse, usernameInUse } from "../../service";
 
 const formSchema = z
@@ -49,7 +48,6 @@ const formSchema = z
 type FormValues = z.infer<typeof formSchema>;
 
 export default function useFormRegister() {
-  const { signUp } = useAuth();
   const [registerSuccess, setRegisterSuccess] = useState<boolean>(false);
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -64,14 +62,7 @@ export default function useFormRegister() {
       return;
     }
 
-    const response = await signUp(parsedValues.data);
-
-    if (response) {
-      form.reset();
-      setRegisterSuccess(true);
-    } else {
-      toast.error("Something went wrong");
-    }
+    console.log(parsedValues.data);
   });
 
   return {

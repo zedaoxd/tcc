@@ -10,12 +10,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import useAuth from "@/zustand/auth";
 import Link from "next/link";
 import { ButtonSignOut } from "../button-sign-out";
 
 export function DropdownMenu() {
-  const { user } = useAuth();
   return (
     <Root>
       <DropdownMenuTrigger asChild>
@@ -23,7 +21,7 @@ export function DropdownMenu() {
           variant="ghost"
           className="font-bold text-black h-full rounded-none hover:bg-transparent hover:text-primary"
         >
-          {user?.user_metadata.username || user?.email}
+          mock user
         </Button>
       </DropdownMenuTrigger>
 

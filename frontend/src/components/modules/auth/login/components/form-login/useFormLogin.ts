@@ -4,7 +4,6 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import useAuth from "@/zustand/auth";
 
 const formSchema = z.object({
   emailOrUsername: z
@@ -22,7 +21,6 @@ type FormValues = z.infer<typeof formSchema>;
 
 export default function useFormLogin() {
   const router = useRouter();
-  const { signIn } = useAuth();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     mode: "onBlur",
@@ -34,16 +32,7 @@ export default function useFormLogin() {
 
     if (!parsedValues.success) return;
 
-    const response = await signIn(parsedValues.data);
-
-    if (response) {
-      router.push("/profile");
-    } else {
-      form.setError("password", {
-        type: "manual",
-        message: "Invalid email/username or password",
-      });
-    }
+    console.log(parsedValues.data);
   });
 
   return { form, onSubmit };
