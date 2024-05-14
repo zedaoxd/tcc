@@ -10,6 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Search } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -24,6 +25,7 @@ type SearchBarProps = {
 };
 
 export default function SearchBar({ searchParams }: SearchBarProps) {
+  const router = useRouter();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -32,7 +34,11 @@ export default function SearchBar({ searchParams }: SearchBarProps) {
   });
 
   function onSubmit(values: FormValues) {
-    console.log(values);
+    const { search } = values;
+
+    const params = new URLSearchParams({ ...searchParams, search });
+
+    router.replace(`/courses?${params.toString()}`);
   }
 
   return (
