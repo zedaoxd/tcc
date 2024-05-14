@@ -64,7 +64,6 @@ services:
       - backend
     environment:
       NODE_ENV: development
-      NEXT_PUBLIC_BACKEND_API_URL: http://localhost:4000
     networks:
       - default
 
