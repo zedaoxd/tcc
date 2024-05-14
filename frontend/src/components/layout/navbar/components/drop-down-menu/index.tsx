@@ -13,7 +13,11 @@ import {
 import Link from "next/link";
 import { ButtonSignOut } from "../button-sign-out";
 
-export function DropdownMenu() {
+type Props = {
+  firstName: string | undefined;
+};
+
+export function DropdownMenu({ firstName }: Props) {
   return (
     <Root>
       <DropdownMenuTrigger asChild>
@@ -21,7 +25,7 @@ export function DropdownMenu() {
           variant="ghost"
           className="font-bold text-black h-full rounded-none hover:bg-transparent hover:text-primary"
         >
-          mock user
+          {firstName}
         </Button>
       </DropdownMenuTrigger>
 
@@ -34,13 +38,13 @@ export function DropdownMenu() {
           <DropdownMenuItem>
             <BookMarked className="mr-2 h-4 w-4" />
 
-            <Link href="/my-courses">My courses</Link>
+            <Link href="/profile/my-courses">My courses</Link>
           </DropdownMenuItem>
 
           <DropdownMenuItem>
             <Book className="mr-2 h-4 w-4" />
 
-            <Link href="/create-courses">Create course</Link>
+            <Link href="/profile/create-courses">Create course</Link>
           </DropdownMenuItem>
 
           <DropdownMenuItem>

@@ -3,7 +3,7 @@
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 const formSchema = z.object({
   emailOrUsername: z
@@ -20,7 +20,6 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export default function useFormLogin() {
-  const router = useRouter();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     mode: "onBlur",
@@ -32,7 +31,12 @@ export default function useFormLogin() {
 
     if (!parsedValues.success) return;
 
-    console.log(parsedValues.data);
+    await signIn("credentials", {
+      email: parsedValues.data.emailOrUsername,
+      password: parsedValues.data.password,
+      redirect: true,
+      callbackUrl: "/",
+    });
   });
 
   return { form, onSubmit };
