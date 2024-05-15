@@ -1,5 +1,6 @@
 import { BarChart, Clock, FileText, GraduationCap } from "lucide-react";
 import CurseDescription from "../cuse-description";
+import { formatDuration } from "@/lib/utils";
 
 type Props = {
   duration: number;
@@ -16,14 +17,18 @@ export default function CurseStatus({
 }: Props) {
   return (
     <>
-      <CurseDescription description={`${duration} Weeks`} Icon={Clock} />
+      <CurseDescription description={formatDuration(duration)} Icon={Clock} />
 
       <CurseDescription
         description={`${numberOfStudents} students`}
         Icon={GraduationCap}
       />
 
-      <CurseDescription description={level} Icon={BarChart} />
+      <CurseDescription
+        className="capitalize"
+        description={level}
+        Icon={BarChart}
+      />
 
       <CurseDescription description={`${lessons} lessons`} Icon={FileText} />
     </>
