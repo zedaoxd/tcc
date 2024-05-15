@@ -110,10 +110,55 @@ export class CourseRepository {
     return new PaginatedDto({ totalItems, page, totalPages, size, itens });
   }
 
-  async findOne(id: string): Promise<FullCourseDto> {
+  async findOne(id: string) {
     return await this.prisma.course.findUnique({
       where: {
         id,
+      },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        imageUrl: true,
+        price: true,
+        discount: true,
+        soldCount: true,
+        rating: true,
+        preview: true,
+        level: true,
+        published: true,
+        createdAt: true,
+        updatedAt: true,
+        modules: {
+          select: {
+            id: true,
+            title: true,
+            duration: true,
+            order: true,
+            lessons: {
+              select: {
+                id: true,
+                title: true,
+                duration: true,
+                preview: true,
+                videoUrl: true,
+              },
+            },
+          },
+        },
+        category: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        author: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
       },
     });
   }

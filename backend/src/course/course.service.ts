@@ -39,7 +39,7 @@ export class CourseService {
     return await this.repository.findAll(query);
   }
 
-  async findOne(id: string): Promise<FullCourseDto> {
+  async findOne(id: string) {
     const entity = await this.repository.findOne(id);
 
     if (!entity) {
