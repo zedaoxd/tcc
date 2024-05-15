@@ -124,3 +124,9 @@ const mapCourse = (course: GetPaginatedCourses): Course.Model => ({
   title: course.title,
   discountPercentage: course.discount,
 });
+
+export async function getCourse(id: string) {
+  const response = await api.get<Course.Full>(`/courses/${id}`);
+
+  return response.data;
+}
