@@ -5,6 +5,12 @@ namespace User {
     quantity: number;
   };
 
+  type SimpleModel = {
+    id: string;
+    firstName: string;
+    lastName: string;
+  };
+
   type Model = {
     id: string;
     email: string;
