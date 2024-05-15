@@ -19,3 +19,14 @@ export function createUUID() {
     return v.toString(16);
   });
 }
+
+export function formatDuration(
+  duration: number,
+  type: "short" | "long" = "short"
+) {
+  if (type === "short") {
+    return duration < 60 ? `${duration} min` : `${Math.floor(duration / 60)}h`;
+  }
+
+  return `${Math.floor(duration / 60)} hour and ${duration % 60} min`;
+}
