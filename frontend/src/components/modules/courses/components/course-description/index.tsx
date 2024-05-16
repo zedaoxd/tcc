@@ -10,7 +10,7 @@ type Props = {
   Icon: LucideIcon;
 };
 
-export default function CurseDescription({
+export default function CourseDescription({
   description,
   Icon,
   className,

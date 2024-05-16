@@ -21,5 +21,17 @@ namespace User {
     emailVerified: boolean;
     createdAt: string;
     updatedAt: string;
+    description: string | null;
+    coursesCreated: Course.Model[];
+  };
+
+  type Instructor = {
+    id: string;
+    firstName: string;
+    lastName: string | null;
+    description: string | null;
+    quantityLessons: number;
+    quantityStudents: number;
+    imageUrl: string | null;
   };
 }

@@ -32,7 +32,7 @@ namespace Course {
     updatedAt: string;
     modules: Module.Model[];
     category: Category.Model;
-    author: User.SimpleModel;
+    author: User.Instructor;
   };
 
   namespace Module {

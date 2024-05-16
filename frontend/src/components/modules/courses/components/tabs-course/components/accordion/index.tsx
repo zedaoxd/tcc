@@ -12,7 +12,7 @@ type Props = {
 
 export default function CourseAccordion({ modules }: Props) {
   return (
-    <>
+    <div className="flex flex-col gap-5">
       <p>
         Explore our comprehensive modules and specific engaging lessons to
         enhance your learning experience.
@@ -39,6 +39,6 @@ export default function CourseAccordion({ modules }: Props) {
           </AccordionItem>
         ))}
       </Accordion>
-    </>
+    </div>
   );
 }

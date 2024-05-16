@@ -11,7 +11,7 @@ import { Jost } from "next/font/google";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import priceToTsx from "@/components/shared/priceToTsx";
-import CurseStatus from "../../../curse-status";
+import CourseStatus from "../../../course-status";
 import { SkeletonSchacnUI } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
 
@@ -59,7 +59,7 @@ export default function CardCourseHorizontal({
           </CardTitle>
 
           <CardDescription className="flex gap-6">
-            <CurseStatus
+            <CourseStatus
               duration={duration}
               lessons={lessons}
               level={level}
