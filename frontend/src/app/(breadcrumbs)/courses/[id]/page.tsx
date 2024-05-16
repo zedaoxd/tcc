@@ -4,6 +4,12 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Jost } from "next/font/google";
 
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import priceToTsx from "@/components/shared/priceToTsx";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import Link from "next/link";
+
 const jost = Jost({ subsets: ["latin"], weight: ["400", "600"] });
 
 type CoursePageProps = {
@@ -182,17 +188,17 @@ type GetCourse = {
     lastName: string | null;
     description: string | null;
     imageUrl: string | null;
-    coursesCreated: Array<{
-      _count: { soldTo: number };
-      modules: Array<{ _count: { lessons: number } }>;
-    }>;
+    coursesCreated: {
+      quantityLessons: number;
+      quantityStudents: number;
+    };
   };
 };
 
 export default async function Course({ params: { id } }: CoursePageProps) {
-  const data: GetCourse = await fetch(`http://backend:4000/courses/${id}`).then(
-    (res) => res.json()
-  );
+  const data: GetCourse = await fetch(`http://backend:4000/courses/${id}`, {
+    next: { revalidate: 0 },
+  }).then((res) => res.json());
 
   const { lessons, duration } = data.modules.reduce(
     (acc, module) => ({
@@ -202,26 +208,14 @@ export default async function Course({ params: { id } }: CoursePageProps) {
     { lessons: 0, duration: 0 }
   );
 
-  const { quantityLessons, quantityStudents } =
-    data.author.coursesCreated.reduce(
-      (acc, course) => {
-        return {
-          quantityLessons:
-            acc.quantityLessons +
-            course.modules.reduce(
-              (acc, module) => acc + module._count.lessons,
-              0
-            ),
-          quantityStudents: acc.quantityStudents + course._count.soldTo,
-        };
-      },
-      { quantityLessons: 0, quantityStudents: 0 }
-    );
-
   const instructor: User.Instructor = {
-    ...data.author,
-    quantityLessons,
-    quantityStudents,
+    id: data.author.id,
+    firstName: data.author.firstName,
+    lastName: data.author.lastName,
+    description: data.author.description,
+    imageUrl: data.author.imageUrl,
+    quantityLessons: data.author.coursesCreated.quantityLessons,
+    quantityStudents: data.author.coursesCreated.quantityStudents,
   };
 
   return (
@@ -253,11 +247,36 @@ export default async function Course({ params: { id } }: CoursePageProps) {
       </div>
 
       <div className="container mt-12 grid grid-cols-4 gap-5">
-        <TabsCourse
-          description={data.description}
-          modules={mockModules}
-          instructor={instructor}
-        />
+        <div className="col-span-3">
+          <TabsCourse
+            description={data.description}
+            modules={mockModules}
+            instructor={instructor}
+          />
+        </div>
+
+        <div className="-mt-40">
+          <div className="sticky top-2">
+            <Card className="overflow-hidden border-none shadow-md">
+              <CardContent className="p-0 relative overflow-hidden h-40">
+                <Image
+                  src={data.imageUrl}
+                  alt={data.title}
+                  fill
+                  className="object-cover"
+                />
+              </CardContent>
+
+              <CardFooter className="flex justify-between gap-1 border py-3 px-2">
+                <div>{priceToTsx(data.price, data.discount)}</div>
+
+                <Button size="min" asChild>
+                  <Link href={`/courses/${id}/checkout`}>Start now</Link>
+                </Button>
+              </CardFooter>
+            </Card>
+          </div>
+        </div>
       </div>
     </section>
   );
