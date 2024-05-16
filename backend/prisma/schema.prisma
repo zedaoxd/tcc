@@ -27,6 +27,7 @@ model User {
   emailToken       String?    @db.VarChar(36)
   reviews          Review[]
   articles         Article[]
+  description      String?    @db.Text
 
   createdAt DateTime @default(now()) @db.DateTime(6)
   updatedAt DateTime @updatedAt @db.DateTime(6)
