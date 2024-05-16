@@ -220,30 +220,32 @@ export default async function Course({ params: { id } }: CoursePageProps) {
 
   return (
     <section className="w-full">
-      <div className="container bg-black text-white py-14 flex flex-col gap-5">
-        <div className="flex gap-3">
-          <Badge variant="gray">{data.category.name}</Badge>
+      <div className="bg-black">
+        <div className="container text-white py-14 flex flex-col gap-5">
+          <div className="flex gap-3">
+            <Badge variant="gray">{data.category.name}</Badge>
 
-          <p className={cn(jost.className, "font-normal")}>
-            by{" "}
-            <span className="font-semibold">
-              {data.author.firstName} {data.author.lastName}
-            </span>
+            <p className={cn(jost.className, "font-normal")}>
+              by{" "}
+              <span className="font-semibold">
+                {data.author.firstName} {data.author.lastName}
+              </span>
+            </p>
+          </div>
+
+          <h1 className="text-4xl font-semibold leading-10 capitalize">
+            {data.title}
+          </h1>
+
+          <p className="flex gap-6">
+            <CourseStatus
+              duration={duration}
+              lessons={lessons}
+              level={data.level}
+              numberOfStudents={data.soldCount}
+            />
           </p>
         </div>
-
-        <h1 className="text-4xl font-semibold leading-10 capitalize">
-          {data.title}
-        </h1>
-
-        <p className="flex gap-6">
-          <CourseStatus
-            duration={duration}
-            lessons={lessons}
-            level={data.level}
-            numberOfStudents={data.soldCount}
-          />
-        </p>
       </div>
 
       <div className="container mt-12 grid grid-cols-4 gap-5">
@@ -255,9 +257,9 @@ export default async function Course({ params: { id } }: CoursePageProps) {
           />
         </div>
 
-        <div className="-mt-40">
-          <div className="sticky top-2">
-            <Card className="overflow-hidden border-none shadow-md">
+        <div>
+          <div className="fixed top-48">
+            <Card className="overflow-hidden border-none shadow-md w-72">
               <CardContent className="p-0 relative overflow-hidden h-40">
                 <Image
                   src={data.imageUrl}
