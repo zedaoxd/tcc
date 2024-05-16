@@ -157,6 +157,26 @@ export class CourseRepository {
             id: true,
             firstName: true,
             lastName: true,
+            description: true,
+            imageUrl: true,
+            coursesCreated: {
+              select: {
+                _count: {
+                  select: {
+                    soldTo: true,
+                  },
+                },
+                modules: {
+                  select: {
+                    _count: {
+                      select: {
+                        lessons: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
           },
         },
       },
