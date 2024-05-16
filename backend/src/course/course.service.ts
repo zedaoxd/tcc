@@ -7,6 +7,7 @@ import { SimpleCourseDto } from './dto/simple-course.dto';
 import { FullCourseDto } from './dto/full-course.dto';
 import { UploadService } from 'src/upload/upload.service';
 import { FindAllQueryDto } from './dto/find-all-query.dto';
+import { FindOneCourseDto } from './dto/find-one-course.dto';
 
 @Injectable()
 export class CourseService {
@@ -46,7 +47,31 @@ export class CourseService {
       throw new NotFoundException(`Course with id ${id} not found`);
     }
 
-    return entity;
+    const { quantityLessons, quantityStudents } =
+      entity.author.coursesCreated.reduce(
+        (acc, course) => {
+          return {
+            quantityLessons:
+              acc.quantityLessons +
+              course.modules.reduce(
+                (acc, module) => acc + module._count.lessons,
+                0,
+              ),
+            quantityStudents: acc.quantityStudents + course._count.soldTo,
+          };
+        },
+        { quantityLessons: 0, quantityStudents: 0 },
+      );
+
+    const dto = new FindOneCourseDto({
+      ...entity,
+      author: {
+        ...entity.author,
+        coursesCreated: { quantityLessons, quantityStudents },
+      },
+    });
+
+    return dto;
   }
 
   async update(
