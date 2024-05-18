@@ -174,7 +174,7 @@ model Purchase {
   userId        String
   user          User           @relation(fields: [userId], references: [id])
   status        PurchaseStatus @default(pending)
-  mercadoPagoId BigInt         @db.BigInt
+  mercadoPagoId String
 
   createdAt DateTime @default(now()) @db.DateTime(6)
   updatedAt DateTime @updatedAt @db.DateTime(6)
