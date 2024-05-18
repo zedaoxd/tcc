@@ -6,7 +6,6 @@ import { cn } from "@/lib/utils";
 import Footer from "@/components/layout/footer";
 import { Toaster } from "sonner";
 import AppProvider from "@/lib/app-provider";
-
 const exo = Exo({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
