@@ -1,16 +1,20 @@
 import { Loader } from "lucide-react";
-import { Button } from "./button";
+import { Button, ButtonProps } from "./button";
 import Show from "@/lib/show";
 
 type Props = {
   loading: boolean;
-  children: React.ReactNode;
-  className?: string;
-};
+  disabled?: boolean;
+} & ButtonProps;
 
-export default function ButtonLoading({ loading, children, className }: Props) {
+export default function ButtonLoading({
+  loading,
+  children,
+  disabled,
+  ...rest
+}: Props) {
   return (
-    <Button className={className} disabled={loading}>
+    <Button disabled={disabled || loading} {...rest}>
       <Show when={loading}>
         <span className="animate-spin mr-1">
           <Loader />

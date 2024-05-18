@@ -11,6 +11,8 @@ declare global {
 
       BACKEND_CONTAINER: string;
       BACKEND_PORT: string;
+
+      NEXT_PUBLIC_MERCADO_PAGO_PUBLIC_KEY: string;
     }
   }
 }

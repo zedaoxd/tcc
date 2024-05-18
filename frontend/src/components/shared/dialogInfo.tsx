@@ -7,22 +7,22 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { AlertCircle, Check } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 
 type Props = {
   title: string;
-  description: string;
   open: boolean;
   onOpenChange: (opem: boolean) => void;
-  html?: boolean;
+  description?: string;
+  children?: React.ReactNode;
 };
 
 export default function DialogInfo({
   description,
+  children,
   title,
   onOpenChange,
   open,
-  html = false,
 }: Props) {
   return (
     <Dialog modal onOpenChange={onOpenChange} open={open}>
@@ -36,11 +36,8 @@ export default function DialogInfo({
         </DialogHeader>
 
         <DialogDescription className="text-xl text-center">
-          {html ? (
-            <div dangerouslySetInnerHTML={{ __html: description }} />
-          ) : (
-            description
-          )}
+          {description}
+          {children}
         </DialogDescription>
       </DialogContent>
     </Dialog>

@@ -103,9 +103,8 @@ export default function FormRegister() {
       <DialogInfo
         open={registerSuccess}
         onOpenChange={() => setRegisterSuccess(false)}
-        description="You have successfully registered. Please check your <b>email</b> to activate your account."
+        description="You have successfully registered. Please check your email to activate your account."
         title="Register success"
-        html
       />
     </>
   );
