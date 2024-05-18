@@ -11,6 +11,9 @@ const nextConfig = {
                 protocol:  'https',
             }
         ]
+    },
+    sassOptions: {
+        includePaths: ['./src/styles'],
     }
 };
 
