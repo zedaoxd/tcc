@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserCreateDTO } from './dto/user-create.dto';
 import { AuthResponseDTO } from './dto/auth-response.dto';
@@ -23,5 +23,12 @@ export class AuthController {
   @Post('verify-email')
   async verifyEmail(@Body('token') emailToken: string): Promise<User> {
     return this.authService.verifyEmail(emailToken);
+  }
+
+  @Get('email-in-use/:email')
+  async emailInUse(
+    @Param('email') email: string,
+  ): Promise<{ emailInUse: boolean }> {
+    return this.authService.emailInUse(email);
   }
 }

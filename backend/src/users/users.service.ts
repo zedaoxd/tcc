@@ -8,4 +8,12 @@ export class UsersService {
   async getUsersHavePublishedCourses() {
     return await this.userRepository.getUsersHavePublishedCourses();
   }
+
+  async getMyPurchasedCourses(userId: string) {
+    return await this.userRepository.getMyPurchasedCourses(userId);
+  }
+
+  async getMyCreatedCourses(userId: string) {
+    return await this.userRepository.getMyCreatedCourses(userId);
+  }
 }

@@ -11,6 +11,8 @@ export class MercadoPagoService {
   async createPayment({ body, requestOptions }: MercadoPago.PaymentCreateData) {
     const payment = new Payment(client);
 
+    console.log(body);
+
     return payment
       .create({ body, requestOptions })
       .then(({ status, status_detail, id }) => ({
@@ -19,7 +21,7 @@ export class MercadoPagoService {
         mercadoPagoPaymentId: id,
       }))
       .catch((error) => {
-        console.log(error);
+        console.log('Error creating payment', error);
         const { errorMessage, errorStatus } = this.validateError(error);
         return { errorMessage, errorStatus };
       });

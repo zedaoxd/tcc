@@ -11,7 +11,7 @@ type HeaderProps = {
 export default function Header({ searchParams }: HeaderProps) {
   return (
     <div className="flex justify-between">
-      <h1 className="text-3xl font-semibold leading-10 capitalize">
+      <h1 className="font-semibold text-3xl capitalize leading-10">
         All Courses
       </h1>
 

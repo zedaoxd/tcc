@@ -21,8 +21,8 @@ namespace MercadoPago {
     payment_method_id?: string;
     statement_descriptor?: string;
     token?: string;
-    transaction_amount?: number;
-    payer?: PayerRequest;
+    transaction_amount: number;
+    payer: PayerRequest;
     point_of_interaction?: PointOfInteractionRequest;
     sponsor_id?: number;
     transaction_details?: TransactionDetailsRequest;
@@ -81,7 +81,7 @@ namespace MercadoPago {
   type PayerRequest = {
     type?: string;
     id?: string;
-    email?: string;
+    email: string;
     identification?: Identification;
     phone?: Phone;
     first_name?: string;

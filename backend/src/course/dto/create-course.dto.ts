@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import { IsEnum, IsNotEmpty, IsOptional, MaxLength } from 'class-validator';
 
 export class CreateCourseDto {
@@ -23,5 +24,6 @@ export class CreateCourseDto {
   level: 'beginner' | 'intermediate' | 'advanced';
 
   @IsOptional()
+  @Transform(({ value }) => value === 'true')
   preview: boolean;
 }

@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useState } from "react";
-import { emailInUse, usernameInUse } from "../../service";
+import { emailInUse, register } from "../../service";
 
 const formSchema = z
   .object({
@@ -22,15 +22,6 @@ const formSchema = z
         (data) => data.split(" ").length >= 2,
         "The full name field must contain at least two names"
       ),
-    username: z
-      .string()
-      .min(1, "The username field cannot be empty")
-      .max(100, "The username field cannot have more than 100 characters")
-      .regex(
-        /^[a-zA-Z0-9_]*$/,
-        "The username field must only contain letters, numbers and underscores"
-      )
-      .refine(usernameInUse, "The username is already taken"),
     password: z
       .string()
       .min(1, "The password field cannot be empty")
@@ -62,7 +53,22 @@ export default function useFormRegister() {
       return;
     }
 
-    console.log(parsedValues.data);
+    const names = parsedValues.data.fullName.split(" ");
+    const firstName = names[0];
+    const lastName = names.slice(1).join(" ");
+
+    register({
+      email: parsedValues.data.email,
+      password: parsedValues.data.password,
+      firstName,
+      lastName,
+    })
+      .then(() => {
+        setRegisterSuccess(true);
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message);
+      });
   });
 
   return {

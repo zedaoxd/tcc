@@ -5,10 +5,10 @@ import { cn } from "@/lib/utils";
 import { Jost } from "next/font/google";
 
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import priceToTsx from "@/components/shared/priceToTsx";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
+import { useCourseServer } from "@/components/modules/courses/hooks/use-course";
 
 const jost = Jost({ subsets: ["latin"], weight: ["400", "600"] });
 
@@ -151,98 +151,50 @@ const mockModules: Course.Module.Model[] = [
   },
 ];
 
-type GetCourse = {
-  id: string;
-  title: string;
-  description: string;
-  imageUrl: string;
-  price: number;
-  discount: number;
-  soldCount: number;
-  rating: number;
-  preview: boolean;
-  level: string;
-  published: boolean;
-  createdAt: string;
-  updatedAt: string;
-  modules: Array<{
-    id: string;
-    title: string;
-    duration: number;
-    order: number;
-    lessons: Array<{
-      id: string;
-      title: string;
-      duration: number;
-      preview: boolean;
-      videoUrl: string;
-    }>;
-  }>;
-  category: {
-    id: string;
-    name: string;
-  };
-  author: {
-    id: string;
-    firstName: string;
-    lastName: string | null;
-    description: string | null;
-    imageUrl: string | null;
-    coursesCreated: {
-      quantityLessons: number;
-      quantityStudents: number;
-    };
-  };
-};
-
 export default async function Course({ params: { id } }: CoursePageProps) {
-  const data: GetCourse = await fetch(`http://backend:4000/courses/${id}`, {
-    next: { revalidate: 0 },
-  }).then((res) => res.json());
+  const course = await useCourseServer(id);
 
-  const { lessons, duration } = data.modules.reduce(
-    (acc, module) => ({
-      lessons: acc.lessons + module.lessons.length,
-      duration: acc.duration + module.duration,
-    }),
-    { lessons: 0, duration: 0 }
-  );
+  if (course.isLoading) {
+    // TODO: create skeleton
+    return <div>Loading...</div>;
+  }
 
-  const instructor: User.Instructor = {
-    id: data.author.id,
-    firstName: data.author.firstName,
-    lastName: data.author.lastName,
-    description: data.author.description,
-    imageUrl: data.author.imageUrl,
-    quantityLessons: data.author.coursesCreated.quantityLessons,
-    quantityStudents: data.author.coursesCreated.quantityStudents,
-  };
+  const {
+    duration,
+    lessons,
+    instructor,
+    category,
+    author,
+    title,
+    level,
+    soldCount,
+    description,
+    thumbnail,
+    price,
+  } = course;
 
   return (
     <section className="w-full">
       <div className="bg-black">
         <div className="container text-white py-14 flex flex-col gap-5">
           <div className="flex gap-3">
-            <Badge variant="gray">{data.category.name}</Badge>
+            <Badge variant="gray">{category}</Badge>
 
             <p className={cn(jost.className, "font-normal")}>
-              by{" "}
-              <span className="font-semibold">
-                {data.author.firstName} {data.author.lastName}
-              </span>
+              by <span className="font-semibold">{author}</span>
             </p>
           </div>
 
           <h1 className="text-4xl font-semibold leading-10 capitalize">
-            {data.title}
+            {title}
           </h1>
 
           <p className="flex gap-6">
             <CourseStatus
               duration={duration}
               lessons={lessons}
-              level={data.level}
-              numberOfStudents={data.soldCount}
+              level={level}
+              numberOfStudents={soldCount}
             />
           </p>
         </div>
@@ -251,7 +203,7 @@ export default async function Course({ params: { id } }: CoursePageProps) {
       <div className="container mt-12 grid grid-cols-4 gap-5">
         <div className="col-span-3">
           <TabsCourse
-            description={data.description}
+            description={description}
             modules={mockModules}
             instructor={instructor}
           />
@@ -262,15 +214,15 @@ export default async function Course({ params: { id } }: CoursePageProps) {
             <Card className="overflow-hidden border-none shadow-md w-72">
               <CardContent className="p-0 relative overflow-hidden h-40">
                 <Image
-                  src={data.imageUrl}
-                  alt={data.title}
+                  src={thumbnail}
+                  alt={title}
                   fill
                   className="object-cover"
                 />
               </CardContent>
 
               <CardFooter className="flex justify-between gap-1 border py-3 px-2">
-                <div>{priceToTsx(data.price, data.discount)}</div>
+                <div>{price}</div>
 
                 <Button size="min" asChild>
                   <Link href={`/courses/${id}/checkout`}>Start now</Link>

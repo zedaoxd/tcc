@@ -8,7 +8,11 @@ import {
 import FormLogin from "./components/form-login";
 import Link from "next/link";
 
-export default function Login() {
+type Props = {
+  callbackUrl?: string;
+};
+
+export default function Login({ callbackUrl }: Props) {
   return (
     <Card className="w-full h-min">
       <CardHeader>
@@ -16,7 +20,7 @@ export default function Login() {
       </CardHeader>
 
       <CardContent>
-        <FormLogin />
+        <FormLogin callbackUrl={callbackUrl} />
       </CardContent>
 
       <CardFooter>

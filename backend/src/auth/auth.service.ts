@@ -24,6 +24,11 @@ export class AuthService {
     private readonly sendEmailQueueService: SendEmailQueueService,
   ) {}
 
+  async emailInUse(email: string) {
+    const user = await this.authRepository.findUserByEmail(email);
+    return { emailInUse: !!user };
+  }
+
   async login(data: UserLoginDTO): Promise<AuthResponseDTO> {
     const user = await this.authRepository.findUserByEmail(data.email);
 

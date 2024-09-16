@@ -14,8 +14,12 @@ import useFormLogin from "./useFormLogin";
 import { Checkbox } from "@/components/ui/checkbox";
 import ButtonLoading from "@/components/ui/button-loading";
 
-export default function FormLogin() {
-  const { form, onSubmit } = useFormLogin();
+type Props = {
+  callbackUrl?: string;
+};
+
+export default function FormLogin({ callbackUrl }: Props) {
+  const { form, onSubmit } = useFormLogin(callbackUrl);
 
   return (
     <Form {...form}>

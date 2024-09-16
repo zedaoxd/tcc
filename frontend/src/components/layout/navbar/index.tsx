@@ -8,13 +8,13 @@ export default function Navbar() {
   return (
     <header
       id="navbar"
-      className="container h-20 flex items-center justify-end md:justify-between"
+      className="flex justify-end md:justify-between items-center h-20 container"
     >
-      <Logo className="hidden md:flex" />
+      <Logo className="md:flex hidden" />
 
-      <Menu className="hidden md:flex" />
+      <Menu className="md:flex hidden" />
 
-      <div className="hidden md:flex items-center">
+      <div className="md:flex items-center hidden">
         <Search />
 
         <UserButton />

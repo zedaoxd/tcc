@@ -28,9 +28,10 @@ const reducer = (state: State, newState: Partial<State>): State => ({
 
 type Props = {
   amount: number;
+  courseId: string;
 };
 
-export default function useCreditCard({ amount }: Props) {
+export default function useCreditCard({ amount, courseId }: Props) {
   const session = useSession();
 
   const form = useForm<FormSchema>({
@@ -115,14 +116,16 @@ export default function useCreditCard({ amount }: Props) {
       identificationNumber: values.identificationNumber,
       cardExpirationMonth: values.cardExpirationMonth,
       cardExpirationYear: values.cardExpirationYear,
-      cardNumber: values.cardNumber.replace(/\s+/g, ""),
+      cardNumber: values.cardNumber.replace(/\s+/g, ""), // Remove spaces
       securityCode: values.securityCode,
     });
+
+    console.log("Card token", cardToken);
 
     if (!cardToken) return;
 
     const body: Parameters<typeof createCheckout>[0] = {
-      courseId: "clvx5w8q10001k0zep3yj6s3g",
+      courseId,
       payment: {
         paymentMethodId: state.paymentMethod.id,
         issuerId: state.issuerId,
@@ -130,7 +133,7 @@ export default function useCreditCard({ amount }: Props) {
         transactionAmount: amount,
         payerEmail: values.payerEmail,
         installments: Number(values.installments),
-        description: "Course purchase",
+        description: `Course purchase id: ${courseId}`,
       },
     };
 

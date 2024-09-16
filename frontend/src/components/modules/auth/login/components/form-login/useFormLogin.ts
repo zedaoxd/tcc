@@ -19,7 +19,7 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-export default function useFormLogin() {
+export default function useFormLogin(callbackUrl?: string) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     mode: "onBlur",
@@ -34,8 +34,7 @@ export default function useFormLogin() {
     await signIn("credentials", {
       email: parsedValues.data.emailOrUsername,
       password: parsedValues.data.password,
-      redirect: true,
-      callbackUrl: "/",
+      callbackUrl: callbackUrl ?? "/",
     });
   });
 

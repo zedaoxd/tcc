@@ -27,13 +27,21 @@ import useCreditCard from "./use-credit-card";
 
 type Props = {
   amount: number;
+  courseId: string;
 };
 
-export default function FormCreditCard({ amount }: Props) {
+export default function FormCreditCard({ amount, courseId }: Props) {
   const router = useRouter();
 
-  const { YEARS, form, state, expiry, onSubmit, setShowModal, showModal } =
-    useCreditCard({ amount });
+  const {
+    YEARS,
+    form,
+    state,
+    expiry,
+    onSubmit,
+    setShowModal,
+    showModal,
+  } = useCreditCard({ amount, courseId });
 
   return (
     <div className="w-full">
@@ -42,7 +50,7 @@ export default function FormCreditCard({ amount }: Props) {
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-8 w-full"
         >
-          <div className="grid grid-cols-2 w-full gap-10 items-end">
+          <div className="items-end gap-10 grid grid-cols-2 w-full">
             <div className="space-y-8">
               <FormField
                 control={form.control}
@@ -75,7 +83,7 @@ export default function FormCreditCard({ amount }: Props) {
                 )}
               />
 
-              <div className="grid grid-cols-2 gap-2">
+              <div className="gap-2 grid grid-cols-2">
                 <FormField
                   control={form.control}
                   name="cardExpirationMonth"
@@ -243,7 +251,7 @@ export default function FormCreditCard({ amount }: Props) {
 
           <FormDescription>
             You will be charged{" "}
-            <span className="text-red-400 font-semibold">${amount} USD</span>
+            <span className="font-semibold text-red-400">R$: {amount}</span>
           </FormDescription>
 
           <ButtonLoading

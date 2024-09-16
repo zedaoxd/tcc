@@ -110,7 +110,7 @@ export async function getUsersPublishedCourses(): Promise<
 
 const mapCourse = (course: GetPaginatedCourses): Course.Model => ({
   id: course.id,
-  author: `${course.author.firstName} ${course.author.lastName}`,
+  author: `${course.author.firstName} ${course.author.lastName ?? ""}`,
   category: course.category.name,
   duration: course.modules.reduce((acc, module) => acc + module.duration, 0),
   lessons: course.modules.reduce(

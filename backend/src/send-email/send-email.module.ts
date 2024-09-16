@@ -40,7 +40,6 @@ import { BullModule } from '@nestjs/bull';
     SendEmailQueueService,
     SendEmailConsumerService,
   ],
-  exports: [SendEmailQueueService]
+  exports: [SendEmailQueueService],
 })
-export class SendEmailModule {
-}
+export class SendEmailModule {}

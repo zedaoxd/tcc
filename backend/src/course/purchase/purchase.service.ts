@@ -14,15 +14,14 @@ export class PurchaseService {
   async create({ courseId, payment: body }: CreatePurchaseDto, userId: string) {
     const response = await this.mercadoPagoService.createPayment({
       body: {
-        token: body.token,
-        transaction_amount: body.transactionAmount,
         payment_method_id: body.paymentMethodId,
-        payer: {
-          email: body.payerEmail,
-        },
         issuer_id: body.issuerId,
+        transaction_amount: body.transactionAmount,
+        token: body.token,
+        payer: { email: body.payerEmail },
         installments: body.installments,
         description: body.description,
+        external_reference: courseId,
       },
     });
 

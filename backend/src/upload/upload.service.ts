@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { SupabaseClient } from '@supabase/supabase-js';
 import * as crypto from 'crypto';
 
-type Storage = 'avatars' | 'video-thumbs';
+type Storage = 'avatars' | 'video-thumbs' | 'videos';
 
 @Injectable()
 export class UploadService {
@@ -17,13 +17,22 @@ export class UploadService {
     );
   }
 
-  async uploadFile(file: Express.Multer.File, storage: Storage) {
+  async uploadFile(
+    file: Express.Multer.File,
+    storage: Storage,
+    folder?: string,
+  ): Promise<string> {
     const randomNameUUID = crypto.randomUUID();
-    const fileName = `${randomNameUUID}-${file.originalname}`;
+    const path = folder
+      ? `${folder}/${randomNameUUID}-${file.originalname}`
+      : `${randomNameUUID}-${file.originalname}`;
 
     const { data, error } = await this.client.storage
       .from(storage)
-      .upload(fileName, file.buffer, { upsert: false });
+      .upload(path, file.buffer, {
+        upsert: false,
+        contentType: file.mimetype,
+      });
 
     if (error) {
       throw new BadRequestException(error.message);

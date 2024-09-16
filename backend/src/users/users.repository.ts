@@ -5,6 +5,51 @@ import { PrismaService } from 'src/prisma.service';
 export class UserRepository {
   constructor(private readonly prisma: PrismaService) {}
 
+  async getMyCreatedCourses(userId: string) {
+    const { coursesCreated } = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        coursesCreated: {
+          select: {
+            author: { select: { firstName: true, lastName: true } },
+            id: true,
+            imageUrl: true,
+            category: { select: { name: true } },
+            title: true,
+            published: true,
+          },
+          orderBy: { title: 'asc' },
+        },
+      },
+    });
+
+    return coursesCreated;
+  }
+
+  async getMyPurchasedCourses(userId: string) {
+    const { coursesPurchased } = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        coursesPurchased: {
+          select: {
+            course: {
+              select: {
+                author: { select: { firstName: true, lastName: true } },
+                id: true,
+                imageUrl: true,
+                category: { select: { name: true } },
+                title: true,
+              },
+            },
+          },
+          orderBy: { course: { title: 'asc' } },
+        },
+      },
+    });
+
+    return coursesPurchased.map(({ course }) => course);
+  }
+
   async getUsersHavePublishedCourses() {
     return await this.prisma.user.findMany({
       where: {

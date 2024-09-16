@@ -24,13 +24,9 @@ export class CourseService {
     const imageUrl = await this.uploadService.uploadFile(image, 'video-thumbs');
 
     return this.repository.create({
+      ...createCurseDto,
       authorId,
       imageUrl,
-      categoryId: createCurseDto.categoryId,
-      description: createCurseDto.description,
-      price: createCurseDto.price,
-      title: createCurseDto.title,
-      level: createCurseDto.level,
     });
   }
 

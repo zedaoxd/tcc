@@ -1,11 +1,22 @@
-import axios from "axios";
+import { api } from "@/components/shared/api";
 
 export async function emailInUse(email: string) {
-  const response = await axios.get(`/auth/email-in-use/${email}`);
-  return response.data.emailInUse;
+  const response = await api.get(`/auth/email-in-use/${email}`);
+
+  return !response.data.emailInUse;
 }
 
-export async function usernameInUse(username: string) {
-  const response = await axios.get(`/auth/username-in-use/${username}`);
-  return response.data.usernameInUse;
+type RegisterData = {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+};
+
+export async function register(data: RegisterData) {
+  return await api.post("/auth/register", data);
+}
+
+export async function verifyEmail(token: string): Promise<void> {
+  return await api.post("/auth/verify-email", { token });
 }

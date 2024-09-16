@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-// import { CreateCourseDto } from './dto/create-course.dto';
 import { PaginatedDto } from 'src/shared/paginated-dto';
 import { SimpleCourseDto } from './dto/simple-course.dto';
 import { FullCourseDto } from './dto/full-course.dto';
